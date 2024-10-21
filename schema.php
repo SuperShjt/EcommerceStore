@@ -18,7 +18,7 @@ $protducType = new ObjectType([
         'brand' => Type::string(),
         'description' => Type::string(),
         'inStock' => Type::boolean(),
-        'price' => [
+         'price' => [
             'type' => Type::float(),
             'resolve' => function($root) use($db){
                 $product_id=$root['id'];
@@ -30,7 +30,7 @@ $protducType = new ObjectType([
                 $price = $result->fetch_assoc();
                 return $price['amount'];
             }
-        ]
+        ] 
     ]
   ]);
 $QueryType = new ObjectType([
@@ -39,9 +39,10 @@ $QueryType = new ObjectType([
         'products' => [
             'type' => Type::listOf($protducType),
             'resolve' => function() use($db){
-                $query = 'SELECT * FROM products';
+                $query = 'SELECT p.*,pr.amount FROM products p JOIN prices pr ON p.id = pr.product_id;';
                 $result = $db->query($query);
                 if(!$result){
+                    echo "i failed"."<br>";
                     var_dump($db->error);
                 }
                 print_r($result->fetch_all());
