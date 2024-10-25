@@ -17,7 +17,7 @@ class Database {
         }
         else{
 
-            echo "Works like magic <br>";
+           // echo "Works like magic <br>";
             return $this->conn;
         }
         
