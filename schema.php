@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
@@ -25,7 +25,7 @@ $attributeType = new ObjectType([
  * Product Type
  * Defines structure for individual products with resolvers for fields that require database queries
  */
-$produtcType = new ObjectType([
+$productType = new ObjectType([
     'name' => 'Product',
     'fields' => [
         'id' => Type::string(),
@@ -73,7 +73,70 @@ $produtcType = new ObjectType([
         ]
     ]
 ]);
+// Define Cart Mutations
+$addToCartMutation = [
+    'name' => 'addToCart',
+    'type' => $productType,
+    'args' => [
+        'productId' => Type::nonNull(Type::string()),
+        'quantity' => Type::int()
+    ],
+    'resolve' => function($root, $args) {
+        $productId = $args['productId'];
+        $quantity = $args['quantity'] ?? 1;
 
+        if (isset($_SESSION['cart'][$productId])) {
+            $_SESSION['cart'][$productId]['quantity'] += $quantity;
+        } else {
+            $_SESSION['cart'][$productId] = ['quantity' => $quantity];
+        }
+
+        return $_SESSION['cart'][$productId];
+    }
+];
+$updateCartQuantityMutation = [
+    'name' => 'updateCartQuantity',
+    'type' => $productType,
+    'args' => [
+        'productId' => Type::nonNull(Type::string()),
+        'quantity' => Type::nonNull(Type::int())
+    ],
+    'resolve' => function($root, $args) {
+        $productId = $args['productId'];
+        $quantity = $args['quantity'];
+
+        if (isset($_SESSION['cart'][$productId])) {
+            $_SESSION['cart'][$productId]['quantity'] = $quantity;
+        }
+
+        return $_SESSION['cart'][$productId];
+    }
+];
+$removeFromCartMutation = [
+    'name' => 'removeFromCart',
+    'type' => Type::boolean(),
+    'args' => [
+        'productId' => Type::nonNull(Type::string())
+    ],
+    'resolve' => function($root, $args) {
+        $productId = $args['productId'];
+
+        if (isset($_SESSION['cart'][$productId])) {
+            unset($_SESSION['cart'][$productId]);
+            return true;
+        }
+        return false;
+    }
+];
+$mutationType = new ObjectType([
+    'name' => 'Mutation',
+    'fields' => [
+        'addToCart' => $addToCartMutation,
+        'updateCartQuantity' => $updateCartQuantityMutation,
+        'removeFromCart' => $removeFromCartMutation
+    ]
+]);
+//==============================================================================================
 /**
  * Query Type
  * Defines the root query for fetching multiple products
@@ -82,7 +145,7 @@ $QueryType = new ObjectType([
     'name' => 'Query',
     'fields' => [
         'products' => [
-            'type' => Type::listOf($produtcType),
+            'type' => Type::listOf($productType),
             'resolve' => function() use($db) {
                 $query = 'SELECT * FROM products';
                 $result = $db->query($query);

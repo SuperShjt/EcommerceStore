@@ -1,4 +1,12 @@
 <?php
+
+
+
+// Initialize cart if it doesn't exist
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
 require 'vendor/autoload.php';
 require 'schema.php';
 
@@ -17,4 +25,8 @@ try {
 } catch (\Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
+
+
+
+
 ?>
