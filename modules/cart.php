@@ -1,7 +1,4 @@
 <?php
-
-
-
 function addcart($productid){
     $quantity = 1;
     /**
@@ -25,13 +22,5 @@ function getcart(){
         echo "Product ID: $productId, Quantity: $quantity <br>";
     }
 }
-
-
-
-
-
-
-
-
 
 ?>
