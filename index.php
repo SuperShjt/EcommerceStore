@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 
 // Initialize cart if it doesn't exist
@@ -9,6 +9,7 @@ if (!isset($_SESSION['cart'])) {
 
 require 'vendor/autoload.php';
 require 'schema.php';
+require 'cart.php';
 
 use GraphQL\GraphQL;
 
