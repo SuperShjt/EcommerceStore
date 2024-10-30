@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
@@ -47,17 +47,18 @@ $productType = new ObjectType([
             }
         ],
         'img_url' => [
-            'type' => Type::string(),
-            'resolve' => function($root) use($db) {
-                $product_id = $root['id'];
-                $query = 'SELECT img_url FROM product_gallery WHERE product_id = ?';
-                $stmt = $db->prepare($query);
-                $stmt->bind_param("s", $product_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $img = $result->fetch_assoc();
-                return $img['img_url'];
-            }
+            'type' => Type::listOf(Type::string()), // Adjust the type to listOf strings
+             'resolve' => function($root) use($db){
+                 $product_id = $root['id'];
+                    $query = 'SELECT img_url FROM product_gallery WHERE product_id = ?';
+                        $stmt = $db->prepare($query);
+                        $stmt->bind_param("s", $product_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                 $images = $result->fetch_all(MYSQLI_ASSOC);
+
+                     return array_column($images, 'img_url');
+        }
         ],
         'attributes' => [
             'type' => Type::listOf($attributeType),
