@@ -17,7 +17,7 @@ class ElectronicsProduct extends Product {
             'description' => $this->description,
             'price' => $this->price,
             'inStock' => $this->inStock,
-            'warranty' => $this->warranty
+            'attribute' => $this->warranty
         ];
     }
 }
