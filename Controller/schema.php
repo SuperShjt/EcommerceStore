@@ -55,7 +55,7 @@ $productType = new ObjectType([
                         $stmt->bind_param("s", $product_id);
                         $stmt->execute();
                         $result = $stmt->get_result();
-                 $images = $result->fetch_all(MYSQLI_ASSOC);
+                         $images = $result->fetch_all(MYSQLI_ASSOC);
 
                      return array_column($images, 'img_url');
         }

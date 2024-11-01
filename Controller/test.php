@@ -23,6 +23,7 @@ try {
     $output = $result->toArray();
     header('Content-Type: application/json');
     echo json_encode($output);
+    echo "product".$output['name'][0]."br";
 } catch (\Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
