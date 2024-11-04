@@ -1,15 +1,8 @@
 <?php
-session_start();
 
-
-// Initialize cart if it doesn't exist
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
 
 require '../vendor/autoload.php';
 require 'schema.php';
-require '../modules/cart.php';
 
 use GraphQL\GraphQL;
 
@@ -23,7 +16,6 @@ try {
     $output = $result->toArray();
     header('Content-Type: application/json');
     echo json_encode($output);
-    echo "product".$output['name'][0]."br";
 } catch (\Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
