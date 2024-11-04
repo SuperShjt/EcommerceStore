@@ -1,11 +1,8 @@
 <?php
-
-class ClothingProduct extends Product {
-    private $size;
-
-    public function __construct($id, $name, $brand, $description, $price, $inStock, $size) {
-        parent::__construct($id, $name, $brand, $description, $price, $inStock);
-        $this->size = $size;
+require_once 'Product.php';
+class ClothProduct extends Product {
+    public function __construct($productData, $db) {
+        parent::__construct($productData, $db);
     }
 
     public function getProductDetails() {
@@ -16,7 +13,9 @@ class ClothingProduct extends Product {
             'description' => $this->description,
             'price' => $this->price,
             'inStock' => $this->inStock,
-            'size' => $this->size
+            'category' => $this->category,
+            'attributes' => $this->attributes,
+            'img_url' => $this->img_urls
         ];
     }
 }

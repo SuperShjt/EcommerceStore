@@ -1,12 +1,8 @@
 <?php
-
-// Electronics Product subclass
-class ElectronicsProduct extends Product {
-    private $warranty;
-
-    public function __construct($id, $name, $brand, $description, $price, $inStock, $warranty) {
-        parent::__construct($id, $name, $brand, $description, $price, $inStock);
-        $this->warranty = $warranty;
+require_once 'Product.php';
+class TechProduct extends Product {
+    public function __construct($productData, $db) {
+        parent::__construct($productData, $db);
     }
 
     public function getProductDetails() {
@@ -17,7 +13,9 @@ class ElectronicsProduct extends Product {
             'description' => $this->description,
             'price' => $this->price,
             'inStock' => $this->inStock,
-            'attribute' => $this->warranty
+            'category' => $this->category,
+            'attributes' => $this->attributes,
+            'img_url' => $this->img_urls
         ];
     }
 }
