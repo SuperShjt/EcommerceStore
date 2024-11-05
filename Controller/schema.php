@@ -5,7 +5,7 @@ use GraphQL\Type\Schema;
 
 require_once '../Data/DBconnect.php';
 require_once '../Modules/ClothProduct.php';
-require_once '../Modules/ElectronicProduct.php';
+require_once '../Modules/TechProduct.php';
 
 $dbx = new Database();
 $db = $dbx->connect();
@@ -26,15 +26,32 @@ $productType = new ObjectType([
         'brand' => Type::string(),
         'description' => Type::string(),
         'inStock' => Type::boolean(),
-        'category' => Type::string(),
-        'price' => Type::float(),
-        'img_url' => Type::listOf(Type::string()),
-        'attributes' => Type::listOf($attributeType)
-    ],
-    'resolveField' => function($product, $args, $context, $info) {
-        file_put_contents('debug.log', "Resolving field: " . $info->fieldName . " for product ID: " . $product['id'], FILE_APPEND);
-        return $product[$info->fieldName];
-    }
+        'category' => [
+            'type'=>Type::string(),
+            'resolve'=> function($root){
+                return $root->getCategory();
+            }
+        ],
+        'price' => [
+            'type'=>Type::float(),
+            'resolve'=> function($root){
+                return $root->getprice();
+            }
+        ],
+        'img_url' => [
+           'type'=>Type::listOf(Type::string()),
+           'resolve'=> function($root){
+                return $root->getImages();
+           }
+        ],
+        'attributes' => [
+            'type'=>Type::listOf($attributeType) ,
+            'resolve'=> function($root){
+                return $root->getAttribute();
+            }
+            
+        ]
+    ]
 ]);
 
 $QueryType = new ObjectType([
@@ -49,9 +66,11 @@ $QueryType = new ObjectType([
                     return array_map(function($productData) use ($db) {
                         file_put_contents('debug.log', "Mapping product: " . print_r($productData, true), FILE_APPEND);
                         $category_id = $productData['category_id']; 
-                        return $category_id === 2
-                        ? new ClothProduct($productData, $db)
-                        : new TechProduct($productData, $db);
+                        if($category_id == 2 || $category_id == '2'){
+                            return new ClothProduct($productData,$db);
+                        }elseif($category_id == 3 || $category_id == '3'){
+                            return new TechProduct($productData,$db);
+                        }
 
 
                     }, $products);
