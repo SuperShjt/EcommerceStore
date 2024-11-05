@@ -4,6 +4,21 @@ class ClothProduct extends Product {
     public function __construct($productData, $db) {
         parent::__construct($productData, $db);
     }
+    public function getCategory(){
+        return $this->fetchCategory();
+    }
+    public function getPrice(){
+        return $this->fetchPrice();
+    }
+    //fetchImages
+    public function getImages(){
+        return $this->fetchImages();
+    }
+    //fetchAttributes
+    public function  getAttribute(){
+        return $this->fetchAttributes();
+    }
+
 
     public function getProductDetails() {
         return [
