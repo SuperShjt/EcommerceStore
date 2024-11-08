@@ -52,5 +52,21 @@ abstract class Product {
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+    protected function fetchID(){
+        return $this->id;
+    }
+    protected function fetchName(){
+        return $this->name;
+    }
+    protected function fetchBrand(){
+        return $this->brand;
+    }
+    protected function fetchStock(){
+        return $this->inStock;
+    }
+    protected function fetchDescription(){
+        return $this->description;
+    }
+
 }
 

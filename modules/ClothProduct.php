@@ -18,6 +18,21 @@ class ClothProduct extends Product {
     public function  getAttribute(){
         return $this->fetchAttributes();
     }
+    public function getID(){
+        return $this->fetchID();
+    }
+    public function getName(){
+        return $this->fetchName();
+    }
+    public function getBrand(){
+        return $this->fetchBrand();
+    }
+    public function getStock(){
+        return $this->fetchStock();
+    }
+    public function getDescription(){
+        return $this->fetchDescription();
+    }
 
 
     public function getProductDetails() {
