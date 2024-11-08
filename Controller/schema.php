@@ -21,11 +21,36 @@ $attributeType = new ObjectType([
 $productType = new ObjectType([
     'name' => 'product',
     'fields' => [
-        'id' => Type::string(),
-        'name' => Type::string(),
-        'brand' => Type::string(),
-        'description' => Type::string(),
-        'inStock' => Type::boolean(),
+        'id' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getId(); // Call the getter method for id
+            }
+        ],
+        'name' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getName(); // Call the getter method for name
+            }
+        ],
+        'brand' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getBrand(); // Call the getter method for brand
+            }
+        ],
+        'description' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getDescription(); // Call the getter method for description
+            }
+        ],
+        'inStock' => [
+            'type' => Type::boolean(),
+            'resolve' => function($root) {
+                return $root->getStock(); // Call the getter method for inStock
+            }
+        ],
         'category' => [
             'type'=>Type::string(),
             'resolve'=> function($root){
@@ -66,13 +91,12 @@ $QueryType = new ObjectType([
                     return array_map(function($productData) use ($db) {
                         file_put_contents('debug.log', "Mapping product: " . print_r($productData, true), FILE_APPEND);
                         $category_id = $productData['category_id']; 
+
                         if($category_id == 2 || $category_id == '2'){
                             return new ClothProduct($productData,$db);
                         }elseif($category_id == 3 || $category_id == '3'){
-                            return new TechProduct($productData,$db);
+                            return  new TechProduct($productData,$db);
                         }
-
-
                     }, $products);
                 } catch (Exception $e) {
                     error_log('Error fetching products: ' . $e->getMessage());
