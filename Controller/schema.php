@@ -33,30 +33,30 @@ $productType = new ObjectType([
                 return $root->getName(); // Call the getter method for name
             }
         ],
-        'brand' => [
+     /*    'brand' => [
             'type' => Type::string(),
             'resolve' => function($root) {
                 return $root->getBrand(); // Call the getter method for brand
             }
-        ],
-        'description' => [
+        ], */
+       /*  'description' => [
             'type' => Type::string(),
             'resolve' => function($root) {
                 return $root->getDescription(); // Call the getter method for description
             }
-        ],
-        'inStock' => [
+        ], */
+      /*   'inStock' => [
             'type' => Type::boolean(),
             'resolve' => function($root) {
                 return $root->getStock(); // Call the getter method for inStock
             }
-        ],
-        'category' => [
+        ], */
+   /*      'category' => [
             'type'=>Type::string(),
             'resolve'=> function($root){
                 return $root->getCategory();
             }
-        ],
+        ], */
         'price' => [
             'type'=>Type::float(),
             'resolve'=> function($root){
@@ -68,14 +68,14 @@ $productType = new ObjectType([
            'resolve'=> function($root){
                 return $root->getImages();
            }
-        ],
-        'attributes' => [
+        ]
+       /*  'attributes' => [
             'type'=>Type::listOf($attributeType) ,
             'resolve'=> function($root){
                 return $root->getAttribute();
             }
             
-        ]
+        ] */
     ]
 ]);
 
