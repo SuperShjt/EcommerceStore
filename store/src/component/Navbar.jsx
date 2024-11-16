@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
-import logo from '../assets/logo.png';
-import cart from '../assets/cart.png';
+import { Link } from 'react-router-dom';
+import logo from '../assets/Logo.png';
+import cart from '../assets/Empty Cart.svg';
 
 class Navbar extends Component {
-    render() {
-        return (
-            <navbar className="navbar">
-                <ul className="sections">
-                    <li><a href="#">ALL</a></li>
-                    <li><a href="#">Cloth</a></li>
-                    <li><a href="#">Tech</a></li>
-                </ul>
-                <img src={logo} alt='Logo' className='img' />
-                <img src={cart} alt='Cart' className='img' />
-            </navbar>
-        );
-    }
+  render() {
+    return (
+      <nav className="navbar">
+        <ul className="sections">
+          <li><Link to="/" >ALL</Link></li>
+          <li><Link to="/cloth">Cloth</Link></li>
+          <li><Link to="/tech">Tech</Link></li>
+        </ul>
+        <img src={logo} alt="Logo" className="img" />
+        
+        <div className='cart'>
+        <img src={cart} alt="Cart" className="img" />
+         <ul className='cart-items'>
+          <li>item 1</li>
+          <li>item 2</li>
+         </ul>
+        </div>
+      </nav>
+    );
+  }
 }
 
 export default Navbar;
