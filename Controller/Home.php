@@ -97,6 +97,7 @@
                 <strong>Price:</strong> ${product.price}<br>
                 <strong>Images:</strong> ${product.img_url.join(', ')}<br>
                 <strong>Attributes:</strong> ${product.attributes.map(attr => `${attr.display_value} (${attr.valuex})`).join(', ')}<br><br>
+                ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++<br><br>
             `;
             responseDiv.appendChild(productDetails);
         });

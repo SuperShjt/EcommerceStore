@@ -84,25 +84,31 @@ $QueryType = new ObjectType([
     'fields' => [
         'products' => [
             'type' => Type::listOf($productType),
-            'resolve' => function() use($db) {
-                try {
-                    $result = $db->query("SELECT * FROM products");
-                    $products = $result->fetch_all(MYSQLI_ASSOC);
-                    return array_map(function($productData) use ($db) {
-                        file_put_contents('debug.log', "Mapping product: " . print_r($productData, true), FILE_APPEND);
-                        $category_id = $productData['category_id']; 
+            'args' => [
+                'type' => Type::string() // Accepts "cloth" or "tech"
+            ],
+            'resolve' => function($root, $args) use($db) {
+                $typeFilter = $args['type'] ?? null;
+                $query = "SELECT * FROM products";
 
-                        if($category_id == 2 || $category_id == '2'){
-                            return new ClothProduct($productData,$db);
-                        }elseif($category_id == 3 || $category_id == '3'){
-                            return  new TechProduct($productData,$db);
-                        }
-                    }, $products);
-                } catch (Exception $e) {
-                    error_log('Error fetching products: ' . $e->getMessage());
-                    
-                    return null; // Return null to indicate an error
+                if ($typeFilter === 'cloth') {
+                    $query .= " WHERE category_id = 2";
+                } elseif ($typeFilter === 'tech') {
+                    $query .= " WHERE category_id = 3";
                 }
+
+                $result = $db->query($query);
+                $products = $result->fetch_all(MYSQLI_ASSOC);
+
+                return array_map(function($productData) use ($db) {
+                    $category_id = $productData['category_id']; 
+
+                    if ($category_id == 2) {
+                        return new ClothProduct($productData, $db);
+                    } elseif ($category_id == 3) {
+                        return new TechProduct($productData, $db);
+                    }
+                }, $products);
             }
         ]
     ]
