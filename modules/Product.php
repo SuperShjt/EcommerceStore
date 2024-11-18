@@ -47,7 +47,7 @@ abstract class Product {
     }
 
     protected function fetchAttributes() {
-        $stmt = $this->db->prepare("SELECT display_value, valuex FROM hotfix WHERE product_id = ?");
+        $stmt = $this->db->prepare("SELECT display_value, valuex, name FROM hotfix WHERE product_id = ?");
         $stmt->bind_param("s", $this->id);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
