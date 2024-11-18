@@ -33,30 +33,6 @@ $productType = new ObjectType([
                 return $root->getName(); // Call the getter method for name
             }
         ],
-     /*    'brand' => [
-            'type' => Type::string(),
-            'resolve' => function($root) {
-                return $root->getBrand(); // Call the getter method for brand
-            }
-        ], */
-       /*  'description' => [
-            'type' => Type::string(),
-            'resolve' => function($root) {
-                return $root->getDescription(); // Call the getter method for description
-            }
-        ], */
-      /*   'inStock' => [
-            'type' => Type::boolean(),
-            'resolve' => function($root) {
-                return $root->getStock(); // Call the getter method for inStock
-            }
-        ], */
-   /*      'category' => [
-            'type'=>Type::string(),
-            'resolve'=> function($root){
-                return $root->getCategory();
-            }
-        ], */
         'price' => [
             'type'=>Type::float(),
             'resolve'=> function($root){
@@ -69,14 +45,71 @@ $productType = new ObjectType([
                 return $root->getImages();
            }
         ]
-       /*  'attributes' => [
+   
+    ]
+]);
+
+$FullProduct = new ObjectType([
+
+        'name'=> 'fullproduct',
+        'fields'=>[
+            'id'=>[
+                'type'=>Type::string(),
+                'resolve'=>function($root){
+                    return $root->getId();
+                }
+            ],
+           'name' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getName(); // Call the getter method for name
+            }
+        ],
+         'brand' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getBrand(); // Call the getter method for brand
+            }
+        ], 
+        'description' => [
+            'type' => Type::string(),
+            'resolve' => function($root) {
+                return $root->getDescription(); // Call the getter method for description
+            }
+        ], 
+        'inStock' => [
+            'type' => Type::boolean(),
+            'resolve' => function($root) {
+                return $root->getStock(); // Call the getter method for inStock
+            }
+        ], 
+        'category' => [
+            'type'=>Type::string(),
+            'resolve'=> function($root){
+                return $root->getCategory();
+            }
+        ], 
+        'price' => [
+            'type'=>Type::float(),
+            'resolve'=> function($root){
+                return $root->getprice();
+            }
+        ],
+        'img_url' => [
+           'type'=>Type::listOf(Type::string()),
+           'resolve'=> function($root){
+                return $root->getImages();
+           }
+        ],
+        'attributes' => [
             'type'=>Type::listOf($attributeType) ,
             'resolve'=> function($root){
                 return $root->getAttribute();
             }
             
-        ] */
-    ]
+        ]
+
+     ]
 ]);
 
 $QueryType = new ObjectType([
@@ -110,7 +143,35 @@ $QueryType = new ObjectType([
                     }
                 }, $products);
             }
+        ],
+       'fullproduct' => [
+             'type' => $FullProduct, // Single product object
+             'args' => [
+                     'id' => Type::nonNull(Type::string()) // Require the product ID
+               ],
+            'resolve' => function($root, $args) use ($db) {
+            $query = "SELECT * FROM products WHERE id = ?";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param('s', $args['id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $productData = $result->fetch_assoc();
+
+            if (!$productData) {
+                return null; // Return null if no product is found
+            }
+
+                $category_id = $productData['category_id'];
+                if ($category_id == 2) {
+                         return new ClothProduct($productData, $db);
+                } elseif ($category_id == 3) {
+                    return new TechProduct($productData, $db);
+            }   
+
+                    return null;
+            }
         ]
+
     ]
 ]);
 
