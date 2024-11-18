@@ -9,7 +9,7 @@ body {
 .navbar{
     display: flex;
     justify-content: space-between;
-    background-color: rgb(202, 194, 194);
+    background-color: rgb(255, 254, 254);
     border-radius: 12px;
     z-index: 1000;
     padding: 0;
@@ -23,6 +23,27 @@ body {
     z-index: 99999;
     right: 15;
   }
+  .navbar ul.sections li a {
+    position: relative;
+    text-decoration: none; /* Optional: Remove default underline */
+    color: inherit; /* Keeps text color the same */
+}
+
+.navbar ul.sections li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Adjust space between text and line */
+    width: 100%; /* Full underline width */
+    height: 2px; /* Line thickness */
+    background-color: rgb(23, 201, 23); /* Line color */
+    visibility: hidden; /* Hide line by default */
+}
+
+.navbar ul.sections li a:hover::after {
+    visibility: visible; /* Show the line on hover */
+}
+
   
   
   

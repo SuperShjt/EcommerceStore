@@ -6,8 +6,12 @@ class TechProducts extends Component{
     render(){
         
         return(
+            <>
             
+            <h1><strong>Tech Products</strong></h1>
             <TechGrid></TechGrid>
+            </>
+            
 
 
         );
