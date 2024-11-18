@@ -41,7 +41,7 @@
 <script>
     document.getElementById('fetchProducts').addEventListener('click', async () => {
         const query = `{
-            products {
+            fullproduct(id:"jacket-canada-goosee") {
                 id
                 name
                 brand
@@ -85,7 +85,7 @@
         const responseDiv = document.getElementById('response');
         responseDiv.innerHTML = ''; // Clear previous responses
 
-        products.forEach(product => {
+        product => {
             const productDetails = document.createElement('div');
             productDetails.innerHTML = `
                 <strong>Product ID:</strong> ${product.id}<br>
@@ -100,7 +100,7 @@
                 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++<br><br>
             `;
             responseDiv.appendChild(productDetails);
-        });
+        };
     }
 </script>
 

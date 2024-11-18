@@ -10,14 +10,21 @@ require_once '../Modules/TechProduct.php';
 $dbx = new Database();
 $db = $dbx->connect();
 
+$insideAttr=new ObjectType([
+    'name'=>'inside',
+    'fields'=>[
+        'display_value'=>Type::string(),
+        'valuex'=>Type::string()
+        ]
+    ]);
+
 $attributeType = new ObjectType([
     'name' => 'Attribute',
     'fields' => [
-        'display_value' => Type::string(),
-        'valuex' => Type::string()
+        'name'=>Type::string(),
+        'valuez'=>Type::listof($insideAttr)
     ]
 ]);
-
 $productType = new ObjectType([
     'name' => 'product',
     'fields' => [
@@ -44,6 +51,12 @@ $productType = new ObjectType([
            'resolve'=> function($root){
                 return $root->getImages();
            }
+        ],
+        'inStock'=>[
+            'type'=>Type::boolean(),
+            'resolve'=> function($root){
+                return $root->getStock();
+            }
         ]
    
     ]
