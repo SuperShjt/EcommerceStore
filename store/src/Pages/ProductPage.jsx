@@ -22,8 +22,11 @@ class ProductPage extends Component {
           price
           img_url
           attributes {
-            display_value
-            valuex
+               name
+              valuez {
+                display_value
+                valuex
+               }
           }
         }
       }
@@ -54,29 +57,73 @@ class ProductPage extends Component {
     if (error) return <p>Error: {error}</p>;
 
     return (
-      <div>
+      
+      <main className="product">
+        <ul className="product-gallery" data-testid='product-gallery'>
+        {product.img_url.map((url, index) => (
+            <li> <img  key={index} src={url} alt={product.name} style={{ width: "200px" }} /></li>
+          ))} </ul>
+
+          <img src={product.img_url[0]} alt="" className="product-current-image"/>
+
+        <section className="product-details">   
         <h1>{product.name}</h1>
         <p><strong>Brand:</strong> {product.brand}</p>
-        <p><strong>Description:</strong> {product.description}</p>
+        <p><strong>Description:</strong>
+        {/* change dangerously inner HTML  */}
+        <span dangerouslySetInnerHTML={{ __html: product.description }} />
+        </p>
         <p><strong>Price:</strong> ${product.price.toFixed(2)}</p>
         <p><strong>In Stock:</strong> {product.inStock ? "Yes" : "No"}</p>
-        <div>
-          <strong>Images:</strong>
-          {product.img_url.map((url, index) => (
-            <img key={index} src={url} alt={product.name} style={{ width: "200px" }} />
-          ))}
-        </div>
-        <div>
+        
+        <div className="attributes">
           <strong>Attributes:</strong>
-          {product.attributes.map((attr, index) => (
-            <div key={index}>
-              {attr.display_value} ({attr.valuex})
-            </div>
-          ))}
+          {console.log(product.attributes)}
+          
+          <div className="attributes-items">
+            
+          {product.attributes.map((attr, index) => (<button key={index}> {attr.display_value} ({attr.valuex}) </button>))}
+          </div>
+
         </div>
-      </div>
+
+          {product.inStock ? <button >Add To Cart</button> : <button disabled>Out Of Stock</button>}
+      </section>
+      </main>
     );
   }
 }
 
 export default (props) => <ProductPage {...props} id={useParams().id} />;
+
+
+
+//
+/*product = [id => x
+            name => x
+            attributes[{
+            name => size
+            disv => Small
+            valuex=> S},
+
+            ]
+            if(attr.name === "Size"){
+            <button>
+            
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/

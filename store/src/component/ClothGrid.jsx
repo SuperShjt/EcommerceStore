@@ -15,6 +15,7 @@ class ClothGrid extends Component {
         name
         price
         img_url
+        inStock
       }
     }`;
 

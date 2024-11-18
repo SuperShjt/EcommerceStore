@@ -4,10 +4,10 @@ class AllProducts extends Component{
 
     render(){
        return(
-        <>
+        <main className="page-layout">
         <h1><strong>Products</strong></h1>
         <ProductGrid></ProductGrid>
-        </>
+        </main>
        );
     }
 

@@ -15,6 +15,7 @@ class ProductGrid extends Component {
         name
         price
         img_url
+        inStock
       }
     }`;
 
@@ -38,7 +39,6 @@ class ProductGrid extends Component {
 
   render() {
     const { products, isLoading, error } = this.state;
-
     if (isLoading) {
       return <div>Loading products...</div>;
     }
