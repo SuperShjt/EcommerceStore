@@ -10,19 +10,41 @@ require_once '../Modules/TechProduct.php';
 $dbx = new Database();
 $db = $dbx->connect();
 
-$insideAttr=new ObjectType([
-    'name'=>'inside',
-    'fields'=>[
-        'display_value'=>Type::string(),
-        'valuex'=>Type::string()
-        ]
-    ]);
+$insideAttr = new ObjectType([
+    'name' => 'AttributeItem',
+    'fields' => [
+        'valuex' => Type::string(),
+        'displayValue' => Type::string(),
+    ]
+]);
+
+
 
 $attributeType = new ObjectType([
     'name' => 'Attribute',
     'fields' => [
         'name'=>Type::string(),
-        'valuez'=>Type::listof($insideAttr)
+        'items'=>[
+            'type'=>Type::listOf($insideAttr),
+            'resolve' => function($root, $args) use($db){
+                $query = "SELECT display_value, valuex FROM hotfix WHERE product_id = ?";
+                $stmt = $db->prepare($query);
+                $stmt->bind_param('s', $root['id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $out=$result->fetch_all(MYSQLI_ASSOC);
+
+                // Transform values into the expected format
+                return array_map(function($out) {
+                    return [
+                        'valuex' => $out['valuex'],
+                        'display_value' => $out['display_value'], // If displayValue is same as value
+                    ];
+                }, $out);
+                
+
+            }
+        ]
     ]
 ]);
 $productType = new ObjectType([
