@@ -23,8 +23,8 @@ class ProductPage extends Component {
           img_url
           attributes {
                name
-              valuez {
-                display_value
+              items {
+                displayValue
                 valuex
                }
           }
