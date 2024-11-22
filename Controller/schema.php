@@ -14,7 +14,7 @@ $insideAttr = new ObjectType([
     'name' => 'AttributeItem',
     'fields' => [
         'valuex' => Type::string(),
-        'displayValue' => Type::string(),
+        'display_value' => Type::string(),
     ]
 ]);
 
@@ -27,9 +27,9 @@ $attributeType = new ObjectType([
         'items'=>[
             'type'=>Type::listOf($insideAttr),
             'resolve' => function($root, $args) use($db){
-                $query = "SELECT display_value, valuex FROM hotfix WHERE product_id = ?";
+                $query = "SELECT display_value, valuex FROM hotfix WHERE product_id = ? AND name = ?";
                 $stmt = $db->prepare($query);
-                $stmt->bind_param('s', $root['id']);
+                $stmt->bind_param('ss', $root['id'],$root['name']);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $out=$result->fetch_all(MYSQLI_ASSOC);
@@ -139,7 +139,12 @@ $FullProduct = new ObjectType([
         'attributes' => [
             'type'=>Type::listOf($attributeType) ,
             'resolve'=> function($root){
-                return $root->getAttribute();
+                $attributes=$root->getAttribute();
+                return array_map(function($attribute) use ($root) {
+                    $attribute['id'] = $root->getID(); // Attach the product ID to each attribute
+                    return $attribute;
+                }, $attributes);
+
             }
             
         ]
