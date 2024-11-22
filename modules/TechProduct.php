@@ -33,9 +33,7 @@ class TechProduct extends Product {
     public function getDescription(){
         return $this->fetchDescription();
     }
-    public function getvalue(){
-        return $this->getAttrValue();
-    }
+    
 
     public function getProductDetails() {
         return [

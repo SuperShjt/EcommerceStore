@@ -67,27 +67,7 @@ abstract class Product {
     protected function fetchDescription(){
         return $this->description;
     }
-    protected function getAttrValue() {
-        $query = "SELECT display_value, valuex, name FROM hotfix WHERE product_id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $this->id);
-        $stmt->execute();
-        $attributes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    
-        // Group attributes by their 'name'
-        $groupedAttributes = [];
-        foreach ($attributes as $attribute) {
-            $groupedAttributes[$attribute['name']][] = [
-                'valuex' => $attribute['valuex'],
-                'displayValue' => $attribute['display_value'],
-            ];
-        }
-    
-        // Debug: Log the result
-        echo (print_r($groupedAttributes, true));
-    
-        return $groupedAttributes;
-    }
+
     
 
 }
