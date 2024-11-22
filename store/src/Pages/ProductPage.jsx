@@ -24,7 +24,7 @@ class ProductPage extends Component {
           attributes {
                name
               items {
-                displayValue
+                display_value
                 valuex
                }
           }
@@ -77,15 +77,19 @@ class ProductPage extends Component {
         <p><strong>In Stock:</strong> {product.inStock ? "Yes" : "No"}</p>
         
         <div className="attributes">
-          <strong>Attributes:</strong>
-          {console.log(product.attributes)}
-          
-          <div className="attributes-items">
-            
-          {product.attributes.map((attr, index) => (<button key={index}> {attr.display_value} ({attr.valuex}) </button>))}
-          </div>
+         <strong>Attributes:</strong>
+          {product.attributes.map((attr, attrIndex) => (
+           <div key={attrIndex} className="attribute">
+           <p>{attr.name}:</p>
+            <div className="attribute-items">
+             {attr.items.map((item, itemIndex) => (
+                <button key={itemIndex}> {item.display_value} ({item.valuex}) </button>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
 
-        </div>
 
           {product.inStock ? <button >Add To Cart</button> : <button disabled>Out Of Stock</button>}
       </section>
