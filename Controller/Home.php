@@ -22,11 +22,17 @@
         button:hover {
             background-color: #218838;
         }
+        .add-order {
+            background-color: #007bff;
+        }
+        .add-order:hover {
+            background-color: #0056b3;
+        }
         pre {
             background-color: #f8f9fa;
             padding: 10px;
             border: 1px solid #ccc;
-            white-space: pre-wrap; /* Allows wrapping of long text */
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -39,10 +45,10 @@
 <div id="response"></div>
 
 <script>
-    document.getElementById('fetchProducts').addEventListener('click', async () => {
+document.getElementById('fetchProducts').addEventListener('click', async () => {
     const query = `
       {
-        fullproduct(id: "huarache-x-stussy-le") {
+        fullproduct(id: "jacket-canada-goosee") {
           id
           name
           brand
@@ -79,7 +85,7 @@
         if (data.errors) {
             document.getElementById('response').textContent = `Error: ${JSON.stringify(data.errors, null, 2)}`;
         } else {
-            displayProduct(data.data.fullproduct); // Adjusted to pass a single product
+            displayProduct(data.data.fullproduct);
         }
     } catch (error) {
         document.getElementById('response').textContent = `Error: ${error.message}`;
@@ -101,10 +107,50 @@ function displayProduct(product) {
         <strong>Price:</strong> ${product.price}<br>
         <strong>Images:</strong> ${product.img_url.join(', ')}<br>
         <strong>Attributes:</strong> ${product.attributes.map(attr => 
-            `${attr.name}: ${attr.items.map(item => `${item.display_value} (${item.valuex})`).join(', ')}`
+            `${attr.name}: ${attr.items.map(item => `${item.display_value} (${item.valuex})`).join(', ')}` 
         ).join('<br>')}<br><br>
+        <button class="add-order">Add to Orders</button>
     `;
+
+    const addOrderButton = productDetails.querySelector('.add-order');
+    addOrderButton.addEventListener('click', () => addToOrders(product));
+
     responseDiv.appendChild(productDetails);
+}
+
+async function addToOrders(product) {
+    const mutation = `
+    mutation {
+        createOrder(
+            product_id: "${product.id}",
+            price: ${product.price},
+            attributes: """${JSON.stringify(product.attributes)}"""
+        ) 
+    }
+`;
+
+    try {
+        const response = await fetch('http://localhost/Scandiweb/Controller/test.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query: mutation })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.errors) {
+            alert(`Error: ${JSON.stringify(data.errors, null, 2)}`);
+        } else {
+            alert(data.data.createOrder); // Show success message
+        }
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
 }
 </script>
 

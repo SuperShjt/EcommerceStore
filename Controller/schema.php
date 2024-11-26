@@ -6,9 +6,12 @@ use GraphQL\Type\Schema;
 require_once '../Data/DBconnect.php';
 require_once '../Modules/ClothProduct.php';
 require_once '../Modules/TechProduct.php';
+require_once '../Data/Orders.php'; 
 
 $dbx = new Database();
 $db = $dbx->connect();
+
+$Orders = new Orders($db);
 
 $insideAttr = new ObjectType([
     'name' => 'AttributeItem',
@@ -152,6 +155,34 @@ $FullProduct = new ObjectType([
      ]
 ]);
 
+
+
+
+$mutationType = new ObjectType([
+    'name' => 'Mutation',
+    'fields' => [
+        'createOrder' => [
+            'type' => Type::string(), // Return a success message
+            'args' => [
+                'product_id' => Type::nonNull(Type::string()),
+                'price' => Type::nonNull(Type::float()),
+                'attributes' => Type::nonNull(Type::string()), // Attributes passed as JSON string
+            ],
+            'resolve' => function($root, $args) use ($Orders) {
+                $product_id = $args['product_id'];
+                $price = $args['price'];
+                $attributes = json_decode($args['attributes'], true); // Decode JSON string
+
+                // Add the order to the database using your Orders class
+                $Orders->createOrder($product_id, $price, $attributes);
+
+                return "Order added successfully!";
+            }
+        ]
+    ]
+]);
+
+
 $QueryType = new ObjectType([
     'name' => 'Query',
     'fields' => [
@@ -217,6 +248,7 @@ $QueryType = new ObjectType([
 
 
 $schema = new Schema([
-    'query' => $QueryType
+    'query' => $QueryType,
+    'mutation' => $mutationType,
 ]);
 ?>
