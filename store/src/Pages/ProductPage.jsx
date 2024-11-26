@@ -67,6 +67,7 @@ class ProductPage extends Component {
     const cartItem = {
       product_id: product.id,
       price: product.price,
+      image: product.img_url[0],
       attributes: selectedAttributes,
     };
 

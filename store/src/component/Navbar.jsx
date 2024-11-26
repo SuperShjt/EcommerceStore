@@ -14,11 +14,17 @@ class Navbar extends React.Component {
     }));
   };
 
+  calculateTotalPrice = () => {
+    const { cartItems } = this.props; // Use cartItems from props
+    if (!cartItems || cartItems.length === 0) return 0;
+    return cartItems.reduce((total, item) => total + (item.price || 0), 0).toFixed(2);
+  };
+  
   render() {
     const { cartStatus } = this.state;
     const { cartItems } = this.props; // Use cartItems passed as a prop
-    console.log(cartItems); // This should display the updated cart items
-
+    const totalPrice = this.calculateTotalPrice(); // Calculate total price dynamically
+    
     return (
       <nav className="navbar">
         <ul className="sections">
@@ -31,17 +37,37 @@ class Navbar extends React.Component {
         <div className="cart-menu">
           <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}>
             <img src={cart} alt="Cart" className="img" />
+            <h6 id="cart-counter">{cartItems.length}</h6> 
+         
           </button>
-          <ul className="cart-items">
-            {cartItems.map((item, index) => (
-              <li key={index}>
-                <strong>ID:</strong> {item.product_id}, <strong>Price:</strong> ${item.price},
-                <strong>Attributes:</strong> {Object.entries(item.attributes)
-                  .map(([key, value]) => `${key}: ${value}`)
-                  .join(", ")}
-              </li>
-            ))}
-          </ul>
+          {cartStatus === "open" && (
+            <div className="current-cart">
+              <p>My Bag {cartItems.length} items</p>
+              {cartItems.length === 0 ? <h2> cart is currently empty</h2> : 
+              <ul className="cart-items">
+              {cartItems.map((item, index) => (
+                <li className="cart-item" key={index}>
+                  <div className="item-details">
+                    <p>{item.product_id}</p>
+                    <p>${item.price}</p>
+                    <p>
+                      {Object.entries(item.attributes)
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join(", ")}
+                    </p>
+                  </div>
+                  <img className="cart-img" src={item.image} alt="" />
+                </li>
+
+              ))}
+            </ul>
+
+              }
+                 <p><strong>Total Price:</strong> ${totalPrice}</p>
+
+              <button id="place-order-btn">Place Order</button>
+            </div>
+          )}
         </div>
       </nav>
     );
