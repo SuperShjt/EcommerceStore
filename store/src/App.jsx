@@ -14,15 +14,20 @@ function App() {
     setCartItems((prevItems) => [...prevItems, item]);
   };
 
+  // Function to clear the cart
+  const clearCart = () => {
+    setCartItems([]); // Reset cartItems to an empty array
+  };
+
   return (
     <>
       <Router>
-        <Navbar cartItems={cartItems} /> {/* Pass cartItems to Navbar */}
+        <Navbar cartItems={cartItems} clearCart={clearCart} /> {/* Pass cartItems to Navbar */}
         <Routes>
           <Route path="/" element={<AllProducts />} />
           <Route path="/cloth" element={<ClothProducts />} />
           <Route path="/tech" element={<TechProducts />} />
-          <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
+          <Route path="/product/:id" element={<ProductPage addToCart={addToCart}  />} />
         </Routes>
       </Router>
     </>

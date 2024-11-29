@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/Logo.png";
 import cart from "../assets/Empty Cart.svg";
+import AddOrder from "./AddOrder";
 
 class Navbar extends React.Component {
   state = {
@@ -13,6 +14,8 @@ class Navbar extends React.Component {
       cartStatus: prevState.cartStatus === "closed" ? "open" : "closed",
     }));
   };
+   
+
 
   calculateTotalPrice = () => {
     const { cartItems } = this.props; // Use cartItems from props
@@ -22,7 +25,7 @@ class Navbar extends React.Component {
   
   render() {
     const { cartStatus } = this.state;
-    const { cartItems } = this.props; // Use cartItems passed as a prop
+    const { cartItems, clearCart  } = this.props; // Use cartItems passed as a prop
     const totalPrice = this.calculateTotalPrice(); // Calculate total price dynamically
     
     return (
@@ -61,11 +64,9 @@ class Navbar extends React.Component {
 
               ))}
             </ul>
-
               }
                  <p><strong>Total Price:</strong> ${totalPrice}</p>
-
-              <button id="place-order-btn">Place Order</button>
+                <AddOrder cartItems={cartItems} clearCart={clearCart}  />
             </div>
           )}
         </div>

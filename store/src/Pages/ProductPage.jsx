@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
 
 class ProductPage extends Component {
   state = {
@@ -7,10 +8,11 @@ class ProductPage extends Component {
     loading: true,
     error: null,
     selectedAttributes: {}, // Store user-selected attributes
+    errors: {}, // Track if any attribute is not selected
   };
 
   async componentDidMount() {
-    const { id } = this.props;
+    const { id } = this.props; // Get product ID from URL props
     const query = `
       {
         fullproduct(id: "${id}") {
@@ -57,6 +59,7 @@ class ProductPage extends Component {
         ...prevState.selectedAttributes,
         [attributeName]: value,
       },
+      errors: { ...prevState.errors, [attributeName]: false }, // Clear error for that attribute
     }));
   };
 
@@ -64,19 +67,31 @@ class ProductPage extends Component {
     const { product, selectedAttributes } = this.state;
     const { addToCart } = this.props; // Access addToCart passed from App
 
-    const cartItem = {
-      product_id: product.id,
-      price: product.price,
-      image: product.img_url[0],
-      attributes: selectedAttributes,
-    };
+    const errors = {};
+    // Check if all attributes have been selected
+    product.attributes.forEach((attr) => {
+      if (!selectedAttributes[attr.name]) {
+        errors[attr.name] = true; // Mark as not selected
+      }
+    });
 
-    addToCart(cartItem); // Call the passed-in addToCart function
-    alert("Item added to cart!");
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors });
+      alert("Please select all required attributes!");
+    } else {
+      const cartItem = {
+        product_id: product.id,
+        price: product.price,
+        image: product.img_url[0],
+        attributes: selectedAttributes,
+      };
+      addToCart(cartItem); // Call the passed-in addToCart function
+      alert("Item added to cart!");
+    }
   };
 
   render() {
-    const { product, loading, error, selectedAttributes } = this.state;
+    const { product, loading, error, selectedAttributes, errors } = this.state;
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -97,8 +112,8 @@ class ProductPage extends Component {
           <h1>{product.name}</h1>
           <p><strong>Brand:</strong> {product.brand}</p>
           <p>
-            <strong>Description:</strong>
-            <span dangerouslySetInnerHTML={{ __html: product.description }} />
+             <strong>Description:</strong>
+              <span>{parse(product.description)}</span>
           </p>
           <p><strong>Price:</strong> ${product.price.toFixed(2)}</p>
           <p><strong>In Stock:</strong> {product.inStock ? "Yes" : "No"}</p>
@@ -122,6 +137,7 @@ class ProductPage extends Component {
                     </label>
                   ))}
                 </div>
+                {errors[attr.name] && <p style={{ color: "red" }}>This attribute is required!</p>}
               </div>
             ))}
           </div>
