@@ -1,15 +1,16 @@
-import ProductGrid from "../component/ProductGrid"
-import React,{Component} from "react";
-class AllProducts extends Component{
+import React, { Component } from "react";
+import ProductGrid from "../component/ProductGrid";
 
-    render(){
-       return(
-        <main className="page-layout">
+class AllProducts extends Component {
+  render() {
+    const { addToCart } = this.props; // Receive from parent
+    return (
+      <main className="page-layout">
         <h1><strong>Products</strong></h1>
-        <ProductGrid></ProductGrid>
-        </main>
-       );
-    }
-
+        <ProductGrid addToCart={addToCart} /> {/* Pass to ProductGrid */}
+      </main>
+    );
+  }
 }
+
 export default AllProducts;

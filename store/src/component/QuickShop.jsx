@@ -1,32 +1,62 @@
-import React, { Component } from "react";
+import React from "react";
 
-class QuickShop extends Component {
-  handleQuickShop = () => {
+class QuickShop extends React.Component {
+  handleQuickShop = async () => {
     const { product, addToCart } = this.props;
 
-    // Auto-select the first option for each attribute
-    const selectedAttributes = {};
-    product.attributes.forEach((attr) => {
-      if (attr.items && attr.items.length > 0) {
-        selectedAttributes[attr.name] = attr.items[0].valuex;
+    // GraphQL query to fetch attributes
+    const query = `
+      {
+        fullproduct(id: "${product.id}") {
+          attributes {
+            name
+            items {
+              display_value
+              valuex
+            }
+          }
+        }
       }
-    });
+    `;
 
-    const cartItem = {
-      product_id: product.id,
-      price: product.price,
-      image: product.img_url[0],
-      attributes: selectedAttributes,
-    };
+    try {
+      const response = await fetch("http://localhost/Scandiweb/Controller/test.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
 
-    addToCart(cartItem); // Add product with selected attributes to the cart
-    alert(`${product.name} added to the cart with default attributes!`);
+      const result = await response.json();
+      if (result.data && result.data.fullproduct) {
+        const attributes = result.data.fullproduct.attributes;
+
+        // Auto-select the first option of each attribute
+        const selectedAttributes = attributes.reduce((acc, attr) => {
+          acc[attr.name] = attr.items[0].valuex; // Automatically select the first item's valuex
+          return acc;
+        }, {});
+
+        // Prepare the cart item
+        const cartItem = {
+          product_id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.img_url[0],
+          attributes: selectedAttributes, // Align with the 2nd snippet
+        };
+
+        addToCart(cartItem); // Add the item to the cart
+        alert(`Added ${product.name} to the cart with attributes: ${JSON.stringify(selectedAttributes)}`);
+      }
+    } catch (error) {
+      console.error("Failed to fetch product attributes:", error);
+    }
   };
 
   render() {
     return (
-      <button onClick={this.handleQuickShop} className="quick-shop-btn">
-        QuickShop
+      <button className="quick-shop-btn" onClick={this.handleQuickShop}>
+        Quick Shop
       </button>
     );
   }

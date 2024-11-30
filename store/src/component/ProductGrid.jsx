@@ -3,14 +3,14 @@ import ProductCard from "./ProductCard";
 
 class ProductGrid extends Component {
   state = {
-    products: [], // State to hold all products
-    isLoading: true, // To handle loading state
-    error: null, // To handle error state
+    products: [],
+    isLoading: true,
+    error: null,
   };
 
   async componentDidMount() {
     const query = `{
-      products{
+      products {
         id
         name
         price
@@ -39,19 +39,16 @@ class ProductGrid extends Component {
 
   render() {
     const { products, isLoading, error } = this.state;
-    if (isLoading) {
-      return <div>Loading products...</div>;
-    }
-
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
+    const { addToCart } = this.props; // Receive from parent
+    if (isLoading) return <div>Loading products...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
       <div className="product-grid">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+          <ProductCard key={product.id} product={product} addToCart={addToCart} /> 
+        ))
+        }
       </div>
     );
   }

@@ -32,7 +32,7 @@ class Navbar extends React.Component {
       <nav className="navbar">
         <ul className="sections">
           <li><Link to="/">ALL</Link></li>
-          <li><Link to="/cloth">Cloth</Link></li>
+          <li><Link to="/cloth">Clothes</Link></li>
           <li><Link to="/tech">Tech</Link></li>
         </ul>
         <img src={logo} alt="Logo" id="logo" />
