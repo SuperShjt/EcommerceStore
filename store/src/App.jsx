@@ -9,18 +9,38 @@ import ProductPage from "./Pages/ProductPage";
 function App() {
   const [cartItems, setCartItems] = React.useState([]);
 
-  const addToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+  const addToCart = (newItem) => {
+    setCartItems((prevItems) => {
+      const existingItemIndex = prevItems.findIndex(
+        (item) =>
+          item.product_id === newItem.product_id &&
+          JSON.stringify(item.attributes) === JSON.stringify(newItem.attributes)
+      );
+  
+      if (existingItemIndex !== -1) {
+        const updatedItems = [...prevItems];
+        updatedItems[existingItemIndex].quantity += newItem.quantity;
+        return updatedItems;
+      }
+  
+      return [...prevItems, { ...newItem, quantity: 1 }];
+    });
   };
 
   const clearCart = () => {
     setCartItems([]);
   };
-
+  const updateCartItems = (callback) => {
+    setCartItems((prevItems) => {
+      const updatedItems = callback(prevItems);
+      console.log("Updated Cart Items:", updatedItems);
+      return updatedItems;
+    });
+  };
   return (
     <>
       <Router>
-        <Navbar cartItems={cartItems} clearCart={clearCart} />
+        <Navbar cartItems={cartItems} clearCart={clearCart} updateCartItems={updateCartItems}/>
         <Routes>
           <Route path="/" element={<AllProducts addToCart={addToCart} />} /> {/* Pass addToCart */}
           <Route path="/cloth" element={<ClothProducts addToCart={addToCart}/>} />

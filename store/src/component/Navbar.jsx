@@ -20,14 +20,38 @@ class Navbar extends React.Component {
   calculateTotalPrice = () => {
     const { cartItems } = this.props; // Use cartItems from props
     if (!cartItems || cartItems.length === 0) return 0;
-    return cartItems.reduce((total, item) => total + (item.price || 0), 0).toFixed(2);
+  
+    return cartItems
+      .reduce((total, item) => total + (item.price * (item.quantity || 1)), 0)
+      .toFixed(2); // Multiply price by quantity and sum up
+  };
+  handleIncreaseQuantity = (productId) => {
+    console.log("Increase Quantity for Product ID:", productId);
+    this.props.updateCartItems((prevCartItems) =>
+      prevCartItems.map((item) =>
+        item.product_id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
   };
   
+  handleDecreaseQuantity = (productId) => {
+    console.log("Decrease Quantity for Product ID:", productId);
+    this.props.updateCartItems((prevCartItems) =>
+      prevCartItems.map((item) =>
+        item.product_id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
   render() {
     const { cartStatus } = this.state;
     const { cartItems, clearCart  } = this.props; // Use cartItems passed as a prop
     const totalPrice = this.calculateTotalPrice(); // Calculate total price dynamically
-    
+    console.log("Cart Items:", this.props.cartItems);
+  console.log("Total Price:", this.calculateTotalPrice());
     return (
       <nav className="navbar">
         <ul className="sections">
@@ -58,8 +82,18 @@ class Navbar extends React.Component {
                         .map(([key, value]) => `${key}: ${value}`)
                         .join(", ")}
                     </p>
+                    <div className="quantity-control">
+                          <button onClick={() => this.handleDecreaseQuantity(item.product_id)}>
+                            -
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button onClick={() => this.handleIncreaseQuantity(item.product_id)}>
+                            +
+                          </button>
+                        </div>
                   </div>
                   <img className="cart-img" src={item.image} alt="" />
+                        
                 </li>
 
               ))}

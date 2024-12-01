@@ -43,6 +43,7 @@ class QuickShop extends React.Component {
           price: product.price,
           image: product.img_url[0],
           attributes: selectedAttributes, // Align with the 2nd snippet
+          quantity: 1,
         };
 
         addToCart(cartItem); // Add the item to the cart

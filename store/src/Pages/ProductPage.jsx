@@ -84,6 +84,7 @@ class ProductPage extends Component {
         price: product.price,
         image: product.img_url[0],
         attributes: selectedAttributes,
+        quantity: 1,
       };
       addToCart(cartItem); // Call the passed-in addToCart function
       alert("Item added to cart!");
