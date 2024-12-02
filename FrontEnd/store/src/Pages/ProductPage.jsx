@@ -81,6 +81,7 @@ class ProductPage extends Component {
     } else {
       const cartItem = {
         product_id: product.id,
+        product_name: product.name,
         price: product.price,
         image: product.img_url[0],
         attributes: selectedAttributes,
@@ -112,42 +113,54 @@ class ProductPage extends Component {
         <section className="product-details">
           <h1>{product.name}</h1>
           <p><strong>Brand:</strong> {product.brand}</p>
-          <p>
-             <strong>Description:</strong>
-              <span>{parse(product.description)}</span>
-          </p>
-          <p><strong>Price:</strong> ${product.price.toFixed(2)}</p>
-          <p><strong>In Stock:</strong> {product.inStock ? "Yes" : "No"}</p>
 
           <div className="attributes">
-            <strong>Attributes:</strong>
-            {product.attributes.map((attr, attrIndex) => (
-              <div key={attrIndex} className="attribute">
-                <p>{attr.name}:</p>
-                <div className="attribute-items">
-                  {attr.items.map((item, itemIndex) => (
-                    <label key={itemIndex}>
-                      <input
-                        type="radio"
-                        name={attr.name}
-                        value={item.valuex}
-                        checked={selectedAttributes[attr.name] === item.valuex}
-                        onChange={() => this.handleAttributeChange(attr.name, item.valuex)}
-                      />
-                      {item.display_value}
-                    </label>
-                  ))}
-                </div>
-                {errors[attr.name] && <p style={{ color: "red" }}>This attribute is required!</p>}
-              </div>
-            ))}
-          </div>
+  {product.attributes.map((attr, attrIndex) => (
+    <div key={attrIndex} className="attribute">
+      <p><strong>{attr.name}: </strong></p>
+      <div className="attribute-items">
+        {attr.items.map((item, itemIndex) => (
+          <label
+          key={itemIndex}
+          className={`attribute-item ${
+            attr.name === "Color"
+            ? "color-item"
+            : "default-item"
+          } ${selectedAttributes[attr.name] === item.valuex ? "selected" : ""}`}
+          style={
+            attr.name === "Color"
+            ? { backgroundColor: item.valuex }
+            : {}
+          }
+          >
+            <input
+              type="radio"
+              name={attr.name}
+              value={item.valuex}
+              checked={selectedAttributes[attr.name] === item.valuex}
+              onChange={() => this.handleAttributeChange(attr.name, item.valuex)}
+              className="radio-input"
+              />
+            {attr.name !== "Color" && <span>{item.display_value}</span>}
+          </label>
+        ))}
+      </div>
+      {errors[attr.name] && <p style={{ color: "red" }}>This attribute is required!</p>}
+    </div>
+  ))}
+</div>
+
+  <p><strong>Price: <br/> ${product.price.toFixed(2)} </strong></p>
 
           {product.inStock ? (
-            <button onClick={this.handleAddToCart}>Add To Cart</button>
+            <button className="product-add-button" onClick={this.handleAddToCart}>Add To Cart</button>
           ) : (
             <button disabled>Out Of Stock</button>
           )}
+              <p>
+                 <strong>Description:</strong>
+                  <span>{parse(product.description)}</span>
+              </p>
         </section>
       </main>
     );

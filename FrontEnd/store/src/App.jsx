@@ -55,14 +55,13 @@ function App() {
           cartStatus={cartStatus}
           toggleCart={toggleCart} // Pass toggleCart function
         />
-        <GreyScreen cartStatus={cartStatus}> {/* Pass cartStatus to GreyScreen */}
+        <GreyScreen cartStatus={cartStatus} toggleCart={toggleCart}/> 
           <Routes>
             <Route path="/" element={<AllProducts addToCart={addToCart} />} />
             <Route path="/cloth" element={<ClothProducts addToCart={addToCart} />} />
             <Route path="/tech" element={<TechProducts addToCart={addToCart} />} />
             <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
           </Routes>
-        </GreyScreen>
       </Router>
     </>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../assets/Logo.png";
 import cart from "../assets/Empty Cart.svg";
 import AddOrder from "./AddOrder";
@@ -61,13 +61,13 @@ class Navbar extends React.Component {
       <nav className="navbar">
         <ul className="sections">
           <li>
-            <Link to="/">ALL</Link>
+            <NavLink to="/"   className={({ isActive }) => (isActive ? "active-link" : "")} >ALL</NavLink>
           </li>
           <li>
-            <Link to="/cloth">Clothes</Link>
+            <NavLink to="/cloth"  className={({ isActive }) => (isActive ? "active-link" : "")}>Clothes</NavLink>
           </li>
           <li>
-            <Link to="/tech">Tech</Link>
+            <NavLink to="/tech"  className={({ isActive }) => (isActive ? "active-link" : "")}>Tech</NavLink>
           </li>
         </ul>
         <img src={logo} alt="Logo" id="logo" />
@@ -79,7 +79,7 @@ class Navbar extends React.Component {
           </button>
           {cartStatus === "open" && (
             <div className="current-cart">
-              <p>My Bag {cartItems.length} items</p>
+              <p> <strong>My Bag</strong> {cartItems.length} items</p>
               {cartItems.length === 0 ? (
                 <h2>Cart is currently empty</h2>
               ) : (
@@ -87,13 +87,32 @@ class Navbar extends React.Component {
                   {cartItems.map((item, index) => (
                     <li className="cart-item" key={index}>
                       <div className="item-details">
-                        <p>{item.product_id}</p>
+                        <p>{item.product_name}</p>
                         <p>${item.price}</p>
-                        <p>
-                          {Object.entries(item.attributes)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(", ")}
-                        </p>
+                        <div className="cart-attributes">
+                          {Object.entries(item.attributes).map(([key, value], attrIndex) => (
+                            <div key={attrIndex} className="cart-attribute">
+                              <p>{key}:</p>
+                              {key.toLowerCase() === "color" ? (
+                                <div
+                                  className={`cart-attribute-color ${
+                                    value === item.attributes[key] ? "selected" : ""
+                                  }`}
+                                  style={{ backgroundColor: value }}
+                                />
+                              ) : (
+                                <div
+                                  className={`cart-attribute-box ${
+                                    value === item.attributes[key] ? "selected" : ""
+                                  }`}
+                                >
+                                  {value}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                         <div className="quantity-control">
                           <button
                             onClick={() =>
@@ -111,7 +130,7 @@ class Navbar extends React.Component {
                             +
                           </button>
                         </div>
-                      </div>
+
                       <img className="cart-img" src={item.image} alt="" />
                     </li>
                   ))}

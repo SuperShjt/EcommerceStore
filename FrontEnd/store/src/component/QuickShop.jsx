@@ -1,10 +1,10 @@
 import React from "react";
+import quickcart from "../assets/Quickcart.png"
 
 class QuickShop extends React.Component {
   handleQuickShop = async () => {
     const { product, addToCart } = this.props;
 
-    // GraphQL query to fetch attributes
     const query = `
       {
         fullproduct(id: "${product.id}") {
@@ -30,23 +30,21 @@ class QuickShop extends React.Component {
       if (result.data && result.data.fullproduct) {
         const attributes = result.data.fullproduct.attributes;
 
-        // Auto-select the first option of each attribute
         const selectedAttributes = attributes.reduce((acc, attr) => {
-          acc[attr.name] = attr.items[0].valuex; // Automatically select the first item's valuex
+          acc[attr.name] = attr.items[0].valuex;
           return acc;
         }, {});
 
-        // Prepare the cart item
         const cartItem = {
           product_id: product.id,
           name: product.name,
           price: product.price,
           image: product.img_url[0],
-          attributes: selectedAttributes, // Align with the 2nd snippet
+          attributes: selectedAttributes,
           quantity: 1,
         };
 
-        addToCart(cartItem); // Add the item to the cart
+        addToCart(cartItem);
         alert(`Added ${product.name} to the cart with attributes: ${JSON.stringify(selectedAttributes)}`);
       }
     } catch (error) {
@@ -57,7 +55,7 @@ class QuickShop extends React.Component {
   render() {
     return (
       <button className="quick-shop-btn" onClick={this.handleQuickShop}>
-        Quick Shop
+        <img src={quickcart} alt="Quick Shop" />
       </button>
     );
   }

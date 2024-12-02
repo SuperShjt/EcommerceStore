@@ -14,10 +14,10 @@ class ProductCard extends React.Component {
             <img src={img_url[0]} alt={name} className={inStock ? null : "out-of-stock"} />
             {inStock ? null : <p className="out-of-stock-text">Out of stock</p>}
           </div>
-          <h3>{name}</h3>
-          <p>${price.toFixed(2)}</p>
         </Link>
-        <QuickShop product={product} addToCart={addToCart} /> {/* Pass props */}
+        <h3>{name}</h3>
+        <p>${price.toFixed(2)}</p>
+        {inStock && <QuickShop product={product} addToCart={addToCart} />} 
       </div>
     );
   }
