@@ -45,7 +45,8 @@ h1{
     width: 30vw;
     height: 50vh;
     padding: 0;
-    background-color: gray ;
+    background-color: rgb(255, 246, 246) ;
+    border: #ddd;
     
   }
   .cart-items{
@@ -130,13 +131,13 @@ z-index: 10000;
   #place-order-btn{
     position: absolute;
     bottom: 0;
-    background-color: rgb(6, 255, 6);
+    background-color:rgb(94, 206, 123);
     border: none;
     height: 5vh;
     width: 100%;
     padding: 0;
     margin: 0;
-
+    color: white;
   }
 
  #cart[data-cart-status = "open"] + .current-cart{
@@ -299,4 +300,13 @@ z-index: 10000;
   .attributes-items{
     display: flex;
     flex-direction: row;
+  }
+  .bg-grey.active {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent grey background */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
   }

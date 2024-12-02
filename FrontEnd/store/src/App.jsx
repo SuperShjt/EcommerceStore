@@ -5,9 +5,11 @@ import AllProducts from "./Pages/AllProducts";
 import ClothProducts from "./Pages/ClothProducts";
 import TechProducts from "./Pages/TechProducts";
 import ProductPage from "./Pages/ProductPage";
+import GreyScreen from "./component/GreyScreen";
 
 function App() {
   const [cartItems, setCartItems] = React.useState([]);
+  const [cartStatus, setCartStatus] = React.useState("closed"); // New state for cartStatus
 
   const addToCart = (newItem) => {
     setCartItems((prevItems) => {
@@ -16,13 +18,13 @@ function App() {
           item.product_id === newItem.product_id &&
           JSON.stringify(item.attributes) === JSON.stringify(newItem.attributes)
       );
-  
+
       if (existingItemIndex !== -1) {
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].quantity += newItem.quantity;
         return updatedItems;
       }
-  
+
       return [...prevItems, { ...newItem, quantity: 1 }];
     });
   };
@@ -30,6 +32,7 @@ function App() {
   const clearCart = () => {
     setCartItems([]);
   };
+
   const updateCartItems = (callback) => {
     setCartItems((prevItems) => {
       const updatedItems = callback(prevItems);
@@ -37,16 +40,29 @@ function App() {
       return updatedItems;
     });
   };
+
+  const toggleCart = () => {
+    setCartStatus((prevStatus) => (prevStatus === "closed" ? "open" : "closed"));
+  };
+
   return (
     <>
       <Router>
-        <Navbar cartItems={cartItems} clearCart={clearCart} updateCartItems={updateCartItems}/>
-        <Routes>
-          <Route path="/" element={<AllProducts addToCart={addToCart} />} /> {/* Pass addToCart */}
-          <Route path="/cloth" element={<ClothProducts addToCart={addToCart}/>} />
-          <Route path="/tech" element={<TechProducts addToCart={addToCart}/>} />
-          <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
-        </Routes>
+        <Navbar
+          cartItems={cartItems}
+          clearCart={clearCart}
+          updateCartItems={updateCartItems}
+          cartStatus={cartStatus}
+          toggleCart={toggleCart} // Pass toggleCart function
+        />
+        <GreyScreen cartStatus={cartStatus}> {/* Pass cartStatus to GreyScreen */}
+          <Routes>
+            <Route path="/" element={<AllProducts addToCart={addToCart} />} />
+            <Route path="/cloth" element={<ClothProducts addToCart={addToCart} />} />
+            <Route path="/tech" element={<TechProducts addToCart={addToCart} />} />
+            <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
+          </Routes>
+        </GreyScreen>
       </Router>
     </>
   );
