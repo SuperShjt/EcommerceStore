@@ -163,14 +163,15 @@ h1{
     border-radius: 5px;
     transition: all 0.3s ease;
     margin-left: 5px;
-    
   }
   
   .cart-attribute-color.selected {
     outline: 2px solid green;
     outline-offset: 3px;
   }
-  
+  .cart-attribute-options{
+    flex-direction: row;
+  }
   .quantity-control {
     display: flex;
     flex-direction: column;
@@ -306,9 +307,6 @@ h1{
     width: 69px;
   }
 
-
-
-    /* main body styling  */
 
   .product-grid {
     display: grid;

@@ -90,28 +90,34 @@ class Navbar extends React.Component {
                         <p>{item.product_name}</p>
                         <p>${item.price}</p>
                         <div className="cart-attributes">
-                          {Object.entries(item.attributes).map(([key, value], attrIndex) => (
-                            <div key={attrIndex} className="cart-attribute">
-                              <p data-testid={`cart-item-attribute-${key}`}>{key}:</p>
-                              {key.toLowerCase() === "color" ? (
-                                <div
-                                  className={`cart-attribute-color ${
-                                    value === item.attributes[key] ? "selected" : ""
-                                  }`}
-                                  style={{ backgroundColor: value }}
-                                />
-                              ) : (
-                                <div
-                                  className={`cart-attribute-box ${
-                                    value === item.attributes[key] ? "selected" : ""
-                                  }`}
-                                >
-                                  {value}
+                            {Object.entries(item.allAttributes).map(([key, options], attrIndex) => (
+                              <div key={attrIndex} className="cart-attribute">
+                                <p data-testid={`cart-item-attribute-${key}`}>{key}:</p>
+                                <div className="cart-attribute-options">
+                                  {options.map((option, optionIndex) => (
+                                    key.toLowerCase() === "color" ? (
+                                      <div
+                                        key={optionIndex}
+                                        className={`cart-attribute-color ${
+                                          option.valuex === item.attributes[key] ? "selected" : ""
+                                        }`}
+                                        style={{ backgroundColor: option.valuex }}
+                                      />
+                                    ) : (
+                                      <div
+                                        key={optionIndex}
+                                        className={`cart-attribute-box ${
+                                          option.valuex === item.attributes[key] ? "selected" : ""
+                                        }`}
+                                      >
+                                        {option.display_value}
+                                      </div>
+                                    )
+                                  ))}
                                 </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                              </div>
+                            ))}
+                          </div>
                       </div>
                         <div className="quantity-control">
                         <button data-testid='cart-item-amount-increase' 
