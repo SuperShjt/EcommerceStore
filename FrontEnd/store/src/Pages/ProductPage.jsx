@@ -66,11 +66,10 @@ class ProductPage extends Component {
   handleAddToCart = () => {
     const { addToCart } = this.props;
     const {product} = this.state;
-    // Transform product attributes into selectedAttributes and allAttributes
     const attributes = product.attributes || [];
     
     const selectedAttributes = attributes.reduce((acc, attr) => {
-      acc[attr.name] = attr.items[0]?.valuex || null; // Default to the first value or null
+      acc[attr.name] = attr.items[0]?.valuex || null; 
       return acc;
     }, {});
   
