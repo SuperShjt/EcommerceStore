@@ -34,23 +34,18 @@ class QuickShop extends React.Component {
           acc[attr.name] = attr.items[0].valuex;
           return acc;
         }, {});
-        const allAttributes = attributes.reduce((acc, attr) => {
-          acc[attr.name] = attr.items;
-          return acc;
-        }, {});
-        
+
         const cartItem = {
           product_id: product.id,
-          product_name: product.name,
+          name: product.name,
           price: product.price,
           image: product.img_url[0],
           attributes: selectedAttributes,
-          allAttributes: allAttributes,
           quantity: 1,
         };
 
         addToCart(cartItem);
-        alert(`Added ${product.name} to the cart with attributes: ${JSON.stringify(selectedAttributes)} and all its attributes: ${JSON.stringify(attributes)} `);
+        alert(`Added ${product.name} to the cart with attributes: ${JSON.stringify(selectedAttributes)}`);
       }
     } catch (error) {
       console.error("Failed to fetch product attributes:", error);

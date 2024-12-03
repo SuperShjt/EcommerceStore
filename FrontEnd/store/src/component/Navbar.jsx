@@ -73,13 +73,13 @@ class Navbar extends React.Component {
         <img src={logo} alt="Logo" id="logo" />
 
         <div className="cart-menu">
-          <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}  data-testid='cart-btn' >
+          <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}>
             <img src={cart} alt="Cart" className="img" />
             <h6 id="cart-counter">{cartItems.length}</h6>
           </button>
           {cartStatus === "open" && (
             <div className="current-cart">
-              <p data-testid='cart-total'> <strong>My Bag</strong> {cartItems.length} items</p>
+              <p> <strong>My Bag</strong> {cartItems.length} items</p>
               {cartItems.length === 0 ? (
                 <h2>Cart is currently empty</h2>
               ) : (
@@ -90,51 +90,44 @@ class Navbar extends React.Component {
                         <p>{item.product_name}</p>
                         <p>${item.price}</p>
                         <div className="cart-attributes">
-                            {Object.entries(item.allAttributes).map(([key, options], attrIndex) => (
-                              <div key={attrIndex} className="cart-attribute">
-                                <p data-testid={`cart-item-attribute-${key}`}>{key}:</p>
-                                <div className="cart-attribute-options">
-                                  {options.map((option, optionIndex) => (
-                                    key.toLowerCase() === "color" ? (
-                                      <div
-                                        key={optionIndex}
-                                        className={`cart-attribute-color ${
-                                          option.valuex === item.attributes[key] ? "selected" : ""
-                                        }`}
-                                        style={{ backgroundColor: option.valuex }}
-                                      />
-                                    ) : (
-                                      <div
-                                        key={optionIndex}
-                                        className={`cart-attribute-box ${
-                                          option.valuex === item.attributes[key] ? "selected" : ""
-                                        }`}
-                                      >
-                                        {option.display_value}
-                                      </div>
-                                    )
-                                  ))}
+                          {Object.entries(item.attributes).map(([key, value], attrIndex) => (
+                            <div key={attrIndex} className="cart-attribute">
+                              <p>{key}:</p>
+                              {key.toLowerCase() === "color" ? (
+                                <div
+                                  className={`cart-attribute-color ${
+                                    value === item.attributes[key] ? "selected" : ""
+                                  }`}
+                                  style={{ backgroundColor: value }}
+                                />
+                              ) : (
+                                <div
+                                  className={`cart-attribute-box ${
+                                    value === item.attributes[key] ? "selected" : ""
+                                  }`}
+                                >
+                                  {value}
                                 </div>
-                              </div>
-                            ))}
-                          </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                         <div className="quantity-control">
-                        <button data-testid='cart-item-amount-increase' 
-                            onClick={() =>
-                              this.handleIncreaseQuantity(item.product_id, item.attributes)
-                            }
-                          >
-                            +
-                          </button>
-                          
-                          <span data-testid='cart-item-amount'>{item.quantity}</span>
-                          <button data-testid='cart-item-amount-decrease' 
+                          <button
                             onClick={() =>
                               this.handleDecreaseQuantity(item.product_id, item.attributes)
                             }
                           >
                             -
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              this.handleIncreaseQuantity(item.product_id, item.attributes)
+                            }
+                          >
+                            +
                           </button>
                         </div>
 
