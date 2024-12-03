@@ -37,7 +37,7 @@ class QuickShop extends React.Component {
 
         const cartItem = {
           product_id: product.id,
-          name: product.name,
+          product_name: product.name,
           price: product.price,
           image: product.img_url[0],
           attributes: selectedAttributes,

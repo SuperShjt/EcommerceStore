@@ -73,13 +73,13 @@ class Navbar extends React.Component {
         <img src={logo} alt="Logo" id="logo" />
 
         <div className="cart-menu">
-          <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}>
+          <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}  data-testid='cart-btn' >
             <img src={cart} alt="Cart" className="img" />
             <h6 id="cart-counter">{cartItems.length}</h6>
           </button>
           {cartStatus === "open" && (
             <div className="current-cart">
-              <p> <strong>My Bag</strong> {cartItems.length} items</p>
+              <p data-testid='cart-total'> <strong>My Bag</strong> {cartItems.length} items</p>
               {cartItems.length === 0 ? (
                 <h2>Cart is currently empty</h2>
               ) : (
@@ -92,7 +92,7 @@ class Navbar extends React.Component {
                         <div className="cart-attributes">
                           {Object.entries(item.attributes).map(([key, value], attrIndex) => (
                             <div key={attrIndex} className="cart-attribute">
-                              <p>{key}:</p>
+                              <p data-testid={`cart-item-attribute-${key}`}>{key}:</p>
                               {key.toLowerCase() === "color" ? (
                                 <div
                                   className={`cart-attribute-color ${
@@ -114,20 +114,21 @@ class Navbar extends React.Component {
                         </div>
                       </div>
                         <div className="quantity-control">
-                          <button
-                            onClick={() =>
-                              this.handleDecreaseQuantity(item.product_id, item.attributes)
-                            }
-                          >
-                            -
-                          </button>
-                          <span>{item.quantity}</span>
-                          <button
+                        <button data-testid='cart-item-amount-increase' 
                             onClick={() =>
                               this.handleIncreaseQuantity(item.product_id, item.attributes)
                             }
                           >
                             +
+                          </button>
+                          
+                          <span data-testid='cart-item-amount'>{item.quantity}</span>
+                          <button data-testid='cart-item-amount-decrease' 
+                            onClick={() =>
+                              this.handleDecreaseQuantity(item.product_id, item.attributes)
+                            }
+                          >
+                            -
                           </button>
                         </div>
 
