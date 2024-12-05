@@ -126,7 +126,7 @@ class ProductPage extends Component {
 
           <div className="attributes">
                   {product.attributes.map((attr, attrIndex) => (
-                    <div key={attrIndex} className="attribute">
+                    <div key={attrIndex} className="attribute" data-testid= {`product-attribute-${attr.name}`}>
                       <p><strong>{attr.name}: </strong></p>
                       <div className="attribute-items">
                         {attr.items.map((item, itemIndex) => (
@@ -160,14 +160,14 @@ class ProductPage extends Component {
                   ))}
                 </div>
 
-  <p><strong>Price: <br/> ${product.price.toFixed(2)} </strong></p>
+            <p><strong>Price: <br/> ${product.price.toFixed(2)} </strong></p>
 
           {product.inStock ? (
-            <button className="product-add-button" onClick={this.handleAddToCart}>Add To Cart</button>
+            <button data-testid='add-to-cart' className="product-add-button" onClick={this.handleAddToCart}>Add To Cart</button>
           ) : (
-            <button disabled>Out Of Stock</button>
+            <button data-testid='add-to-cart' disabled>Out Of Stock</button>
           )}
-              <p>
+              <p data-testid='product-description'>
                  <strong>Description:</strong>
                   <span>{parse(product.description)}</span>
               </p>
