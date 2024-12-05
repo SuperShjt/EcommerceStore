@@ -60,16 +60,50 @@ class Navbar extends React.Component {
     return (
       <nav className="navbar">
         <ul className="sections">
-          <li>
-            <NavLink to="/"   className={({ isActive }) => (isActive ? "active-link" : "")} >ALL</NavLink>
-          </li>
-          <li>
-            <NavLink to="/cloth"  className={({ isActive }) => (isActive ? "active-link" : "")}>Clothes</NavLink>
-          </li>
-          <li>
-            <NavLink to="/tech"  className={({ isActive }) => (isActive ? "active-link" : "")}>Tech</NavLink>
-          </li>
-        </ul>
+                <li>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) => (isActive ? "active-link" : "")}
+                  >
+                    {({ isActive }) => (
+                      <span
+                        data-testid={isActive ? "active-category-link" : "category-link"}
+                      >
+                        ALL
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/cloth"
+                    className={({ isActive }) => (isActive ? "active-link" : "")}
+                  >
+                    {({ isActive }) => (
+                      <span
+                        data-testid={isActive ? "active-category-link" : "category-link"}
+                      >
+                        Clothes
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/tech"
+                    className={({ isActive }) => (isActive ? "active-link" : "")}
+                  >
+                    {({ isActive }) => (
+                      <span
+                        data-testid={isActive ? "active-category-link" : "category-link"}
+                      >
+                        Tech
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+         </ul>
+
         <img src={logo} alt="Logo" id="logo" />
 
         <div className="cart-menu">
