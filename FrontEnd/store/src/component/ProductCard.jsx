@@ -4,7 +4,7 @@ import QuickShop from "./QuickShop";
 
 class ProductCard extends React.Component {
   render() {
-    const { product, addToCart } = this.props; // Receive props
+    const { product, addToCart } = this.props; 
     const { id, name, price, img_url, inStock } = product;
 
     return (

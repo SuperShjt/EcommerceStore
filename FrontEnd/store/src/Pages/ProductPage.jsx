@@ -90,7 +90,7 @@ class ProductPage extends Component {
         acc[attr.name] = attr.items.map((item) => ({
           valuex: item.valuex,
           display_value: item.display_value,
-          selected: selectedAttributes[attr.name] === item.valuex, // Mark selected
+          selected: selectedAttributes[attr.name] === item.valuex, // Flag for selected to find selected attribute
         }));
         return acc;
       }, {}),

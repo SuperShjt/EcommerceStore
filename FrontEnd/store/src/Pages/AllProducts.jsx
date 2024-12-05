@@ -3,11 +3,11 @@ import ProductGrid from "../component/ProductGrid";
 
 class AllProducts extends Component {
   render() {
-    const { addToCart } = this.props; // Receive from parent
+    const { addToCart } = this.props; 
     return (
       <main className="page-layout">
         <h1><strong>Products</strong></h1>
-        <ProductGrid addToCart={addToCart} /> {/* Pass to ProductGrid */}
+        <ProductGrid addToCart={addToCart} /> 
       </main>
     );
   }

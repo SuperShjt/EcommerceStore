@@ -33,10 +33,10 @@ class AddOrder extends Component {
       }
     });
 
-    // Wait for all order requests to complete
+   
     await Promise.all(promises);
 
-    // Clear the cart after placing all orders
+    
     
 
     alert("Order placement completed, and cart is cleared!");

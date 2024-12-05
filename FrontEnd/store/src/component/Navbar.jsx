@@ -6,16 +6,16 @@ import AddOrder from "./AddOrder";
 
 class Navbar extends React.Component {
   toggleCart = () => {
-    this.props.toggleCart(); // Call toggleCart from the parent component
+    this.props.toggleCart(); 
   };
 
   calculateTotalPrice = () => {
-    const { cartItems } = this.props; // Use cartItems from props
+    const { cartItems } = this.props; 
     if (!cartItems || cartItems.length === 0) return 0;
 
     return cartItems
       .reduce((total, item) => total + item.price * (item.quantity || 1), 0)
-      .toFixed(2); // Multiply price by quantity and sum up
+      .toFixed(2); 
   };
 
   handleIncreaseQuantity = (productId, attributes) => {
@@ -42,17 +42,17 @@ class Navbar extends React.Component {
   };
 
   areAttributesEqual = (attributes1, attributes2) => {
-    // Assuming attributes are an object, convert both to sorted arrays of key-value strings
+   
     const entries1 = Object.entries(attributes1).sort();
     const entries2 = Object.entries(attributes2).sort();
 
-    // Compare both sorted arrays
+   
     return JSON.stringify(entries1) === JSON.stringify(entries2);
   };
 
   render() {
-    const { cartStatus, cartItems, clearCart } = this.props; // Get cartStatus from props
-    const totalPrice = this.calculateTotalPrice(); // Calculate total price dynamically
+    const { cartStatus, cartItems, clearCart } = this.props; 
+    const totalPrice = this.calculateTotalPrice(); 
 
     console.log("Cart Items:", cartItems);
     console.log("Total Price:", totalPrice);
@@ -79,7 +79,7 @@ class Navbar extends React.Component {
           </button>
           {cartStatus === "open" && (
             <div className="current-cart">
-              <p> <strong>My Bag</strong> {cartItems.length} items</p>
+              <p data-testid='cart-item-amount'> <strong>My Bag</strong> {cartItems.length} items</p>
               {cartItems.length === 0 ? (
                 <h2>Cart is currently empty</h2>
               ) : (
@@ -90,24 +90,42 @@ class Navbar extends React.Component {
                         <p>{item.product_name}</p>
                         <p>${item.price}</p>
                         <div className="cart-attributes">
-                        {Object.entries(item.attributes || {}).map(([key, values], attrIndex) => (
-                             <div key={attrIndex} className="cart-attribute">
-                              <p>{key}:</p>
-                              {values.map((value,valueIndex) => ( key.toLowerCase() === "color" ? (
-                                <div key={valueIndex} className={`cart-attribute-color ${value.selected ? "selected" : ""  }  `}
-                                    style={{backgroundColor: value.valuex}} />
-                                ) : (  
-                                   <div key={valueIndex} className={`cart-attribute-box ${value.selected ? "selected" : ""}`}> {value.display_value}</div>
-                                  )
-                              )
-                            )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                                  {Object.entries(item.attributes || {}).map(([key, values], attrIndex) => {
+                                    const kebabKey = key.toLowerCase().replace(/\s+/g, '-'); 
+
+                                    return (
+                                      <div
+                                        key={attrIndex}
+                                        className="cart-attribute"
+                                        data-testid={`cart-item-attribute-${kebabKey}`} 
+                                      >
+                                        <p>{key}:</p>
+                                        {values.map((value, valueIndex) => {
+                                          return key.toLowerCase() === "color" ? (
+                                            <div
+                                              key={valueIndex}
+                                              className={`cart-attribute-color ${value.selected ? "selected" : ""}`}
+                                              style={{ backgroundColor: value.valuex }}
+                                              data-testid={`cart-item-attribute-${kebabKey}-${kebabKey}${value.selected ? '-selected' : ''}`} 
+                                            />
+                                          ) : (
+                                            <div
+                                              key={valueIndex}
+                                              className={`cart-attribute-box ${value.selected ? "selected" : ""}`}
+                                              data-testid={`cart-item-attribute-${kebabKey}-${kebabKey}${value.selected ? '-selected' : ''}`} 
+                                            >
+                                              {value.display_value}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                          </div>
                         <div className="quantity-control">
                          
-                          <button
+                          <button  data-testid='cart-item-amount-increase'
                             onClick={() =>
                               this.handleIncreaseQuantity(item.product_id, item.attributes)
                             }
@@ -115,7 +133,7 @@ class Navbar extends React.Component {
                             +
                           </button>
                           <span>{item.quantity}</span>
-                          <button
+                          <button data-testid='cart-item-amount-decrease'
                             onClick={() =>
                               this.handleDecreaseQuantity(item.product_id, item.attributes)
                             }
@@ -130,7 +148,7 @@ class Navbar extends React.Component {
                 </ul>
               )}
               <p>
-                <strong>Total Price:</strong> ${totalPrice}
+                <strong data-testid='cart-total'>Total Price:</strong> ${totalPrice}
               </p>
               <AddOrder cartItems={cartItems} clearCart={clearCart} />
             </div>
@@ -142,3 +160,10 @@ class Navbar extends React.Component {
 }
 
 export default Navbar;
+
+/**
+ * Cart  attribute Design
+ *  Size = 
+ * [ S = "S", M = "M", L= "L" ]
+ * Color : same concept 
+ */

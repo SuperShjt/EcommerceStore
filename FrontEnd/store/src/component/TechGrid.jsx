@@ -3,9 +3,9 @@ import ProductCard from "./ProductCard";
 
 class ClothGrid extends Component {
   state = {
-    products: [], // State to hold all products
-    isLoading: true, // To handle loading state
-    error: null, // To handle error state
+    products: [], 
+    isLoading: true, 
+    error: null, 
   };
 
   async componentDidMount() {
@@ -39,7 +39,7 @@ class ClothGrid extends Component {
 
   render() {
     const { products, isLoading, error } = this.state;
-    const { addToCart } = this.props; // Receive from parent
+    const { addToCart } = this.props; 
     if (isLoading) return <div>Loading products...</div>;
     if (error) return <div>Error: {error}</div>;
 

@@ -39,7 +39,7 @@ class ProductGrid extends Component {
 
   render() {
     const { products, isLoading, error } = this.state;
-    const { addToCart } = this.props; // Receive from parent
+    const { addToCart } = this.props; 
     if (isLoading) return <div>Loading products...</div>;
     if (error) return <div>Error: {error}</div>;
 
