@@ -90,44 +90,37 @@ class Navbar extends React.Component {
                         <p>{item.product_name}</p>
                         <p>${item.price}</p>
                         <div className="cart-attributes">
-                          {Object.entries(item.attributes).map(([key, value], attrIndex) => (
-                            <div key={attrIndex} className="cart-attribute">
+                        {Object.entries(item.attributes || {}).map(([key, values], attrIndex) => (
+                             <div key={attrIndex} className="cart-attribute">
                               <p>{key}:</p>
-                              {key.toLowerCase() === "color" ? (
-                                <div
-                                  className={`cart-attribute-color ${
-                                    value === item.attributes[key] ? "selected" : ""
-                                  }`}
-                                  style={{ backgroundColor: value }}
-                                />
-                              ) : (
-                                <div
-                                  className={`cart-attribute-box ${
-                                    value === item.attributes[key] ? "selected" : ""
-                                  }`}
-                                >
-                                  {value}
-                                </div>
-                              )}
+                              {values.map((value,valueIndex) => ( key.toLowerCase() === "color" ? (
+                                <div key={valueIndex} className={`cart-attribute-color ${value.selected ? "selected" : ""  }  `}
+                                    style={{backgroundColor: value.valuex}} />
+                                ) : (  
+                                   <div key={valueIndex} className={`cart-attribute-box ${value.selected ? "selected" : ""}`}> {value.display_value}</div>
+                                  )
+                              )
+                            )}
                             </div>
                           ))}
                         </div>
                       </div>
                         <div className="quantity-control">
-                          <button
-                            onClick={() =>
-                              this.handleDecreaseQuantity(item.product_id, item.attributes)
-                            }
-                          >
-                            -
-                          </button>
-                          <span>{item.quantity}</span>
+                         
                           <button
                             onClick={() =>
                               this.handleIncreaseQuantity(item.product_id, item.attributes)
                             }
                           >
                             +
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              this.handleDecreaseQuantity(item.product_id, item.attributes)
+                            }
+                          >
+                            -
                           </button>
                         </div>
 

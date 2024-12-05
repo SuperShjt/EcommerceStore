@@ -1,5 +1,5 @@
 import React from "react";
-import quickcart from "../assets/Quickcart.png"
+import quickcart from "../assets/Quickcart.png";
 
 class QuickShop extends React.Component {
   handleQuickShop = async () => {
@@ -30,22 +30,43 @@ class QuickShop extends React.Component {
       if (result.data && result.data.fullproduct) {
         const attributes = result.data.fullproduct.attributes;
 
-        const selectedAttributes = attributes.reduce((acc, attr) => {
-          acc[attr.name] = attr.items[0].valuex;
+     
+        const formattedAttributes = attributes.reduce((acc, attr) => {
+          const formattedItems = attr.items.map((item, index) => ({
+            display_value: item.display_value,
+            valuex: item.valuex,
+            selected: index === 0, 
+          }));
+
+          acc[attr.name] = formattedItems;
           return acc;
         }, {});
 
+       
         const cartItem = {
           product_id: product.id,
-          name: product.name,
+          product_name: product.name,
           price: product.price,
           image: product.img_url[0],
-          attributes: selectedAttributes,
+          attributes: formattedAttributes, 
           quantity: 1,
         };
 
+      
         addToCart(cartItem);
-        alert(`Added ${product.name} to the cart with attributes: ${JSON.stringify(selectedAttributes)}`);
+
+        
+        const attributeDisplay = attributes.map((attr) => {
+          const formattedValues = formattedAttributes[attr.name].map((item) => {
+            return item.selected
+              ? `[${item.display_value} - selected]`
+              : `[${item.display_value}]`;
+          }).join(" ");
+
+          return `${attr.name}:\n${formattedValues}`;
+        }).join("\n");
+
+        alert(`Added ${product.name} to the cart with attributes:\n${attributeDisplay}`);
       }
     } catch (error) {
       console.error("Failed to fetch product attributes:", error);

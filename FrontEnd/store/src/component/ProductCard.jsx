@@ -8,7 +8,7 @@ class ProductCard extends React.Component {
     const { id, name, price, img_url, inStock } = product;
 
     return (
-      <div className="product-card" data-testid={`product-${id}`} >
+      <div className="product-card" data-testid={`product-${id}`}  >
         <Link to={`/product/${id}`}>
           <div className="product-image">
             <img src={img_url[0]} alt={name} className={inStock ? null : "out-of-stock"} />

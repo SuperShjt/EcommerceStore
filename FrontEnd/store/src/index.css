@@ -21,7 +21,6 @@ h1{
   padding-bottom: 3rem;
 }
 
-/* navbar styling */
 .navbar{
     display: flex;
     justify-content: space-between;
@@ -124,7 +123,7 @@ h1{
   
   .cart-attribute {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 5px;
     
   }
