@@ -7,8 +7,9 @@ class ProductPage extends Component {
     product: null,
     loading: true,
     error: null,
-    selectedAttributes: {}, // Store user-selected attributes
-    errors: {}, // Track if any attribute is not selected
+    selectedAttributes: {},
+    errors: {}, 
+    mainImg: 0 ,
   };
 
   async componentDidMount() {
@@ -101,9 +102,32 @@ class ProductPage extends Component {
     alert("Item added to cart!");
   };
   
+  nextImg = ()=>{
+   if(this.state.mainImg < this.state.product.img_url.length - 1 ){
+    this.setState({mainImg: this.state.mainImg + 1});
+  }else{
+    this.setState({mainImg: 0});
+  }
+    return this.state.mainImg
+  } 
+
+  prevImg = ()=>{
+    if (this.state.mainImg != 0) {
+    this.setState({mainImg: this.state.mainImg - 1 });
+  }else{
+    this.setState({mainImg: this.state.product.img_url.length - 1 })
+  }
+    return this.state.mainImg
+  }
+  
+  selectImg = (id)=> {
+    this.setState({mainImg: id });
+    return this.state.mainImg
+  }
+
 
   render() {
-    const { product, loading, error, selectedAttributes, errors } = this.state;
+    const { product, loading, error, selectedAttributes, errors, mainImg  } = this.state;
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -113,12 +137,17 @@ class ProductPage extends Component {
         <ul className="product-gallery" data-testid="product-gallery">
           {product.img_url.map((url, index) => (
             <li key={index}>
+              <button onClick={()=>{ this.selectImg(index)}} className="img-button">
               <img src={url} alt={product.name} style={{ width: "200px" }} />
+              </button>
             </li>
           ))}
         </ul>
-
-        <img src={product.img_url[0]} alt="" className="product-current-image" />
+        <div className="product-image">
+          <button className="left-button" onClick={()=>{this.prevImg()}}> {"<"} </button>
+        <img src={product.img_url[mainImg]} alt="" className="product-current-image" />
+         <button className="right-button" onClick={()=>{this.nextImg()}}> {">"}</button>
+        </div>
 
         <section className="product-details">
           <h1>{product.name}</h1>
@@ -167,10 +196,10 @@ class ProductPage extends Component {
           ) : (
             <button data-testid='add-to-cart' disabled>Out Of Stock</button>
           )}
-              <p data-testid='product-description'>
+              <div data-testid='product-description'>
                  <strong>Description:</strong>
-                  <span>{parse(product.description)}</span>
-              </p>
+                  <p>{parse(product.description)}</p>
+              </div>
         </section>
       </main>
     );
