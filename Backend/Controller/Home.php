@@ -130,7 +130,7 @@ async function addToOrders(product) {
 `;
 
     try {
-        const response = await fetch('http://localhost/Scandiweb/Controller/test.php', {
+        const response = await fetch('http://localhost/Scandiweb/Backend/Controller/test.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
