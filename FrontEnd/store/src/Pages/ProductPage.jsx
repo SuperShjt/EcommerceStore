@@ -66,7 +66,7 @@ class ProductPage extends Component {
 
   handleAddToCart = () => {
     const { product, selectedAttributes } = this.state;
-    const { addToCart } = this.props;
+    const { addToCart, toggleCart } = this.props;
   
     const errors = {};
     // Validate selected attributes
@@ -97,9 +97,9 @@ class ProductPage extends Component {
       }, {}),
       quantity: 1,
     };
-  
+    toggleCart();
     addToCart(cartItem);
-    alert("Item added to cart!");
+    
   };
   
   nextImg = ()=>{
@@ -155,12 +155,13 @@ class ProductPage extends Component {
 
           <div className="attributes">
                   {product.attributes.map((attr, attrIndex) => (
-                    <div key={attrIndex} className="attribute" data-testid= {`product-attribute-${attr.name}`}>
+                    <div key={attrIndex} className="attribute" data-testid= {`product-attribute-${attr.name.toLowerCase()}`}>
                       <p><strong>{attr.name}: </strong></p>
                       <div className="attribute-items">
                         {attr.items.map((item, itemIndex) => (
                           <label
                           key={itemIndex}
+                          data-testid={`product-attribute-${attr.name.toLowerCase()}-${item.display_value}`}
                           className={`attribute-item ${
                             attr.name === "Color"
                             ? "color-item"
@@ -191,11 +192,36 @@ class ProductPage extends Component {
 
             <p><strong>Price: <br/> ${product.price.toFixed(2)} </strong></p>
 
-          {product.inStock ? (
-            <button data-testid='add-to-cart' className="product-add-button" onClick={this.handleAddToCart}>Add To Cart</button>
-          ) : (
-            <button data-testid='add-to-cart' disabled>Out Of Stock</button>
-          )}
+        
+              <button
+                data-testid="add-to-cart"
+                className="product-add-button"
+                onClick={product.inStock ? this.handleAddToCart : undefined}
+                disabled={
+                  !product.inStock ||
+                  product.attributes.some(
+                    (attr) => !this.state.selectedAttributes[attr.name]
+                  )
+                }
+              >
+                {product.inStock ? "Add To Cart" : "Out Of Stock"}
+              </button>
+                    {!product.inStock && (
+                      <p className="error-text" style={{ color: "red" }}>
+                        This product is out of stock.
+                      </p>
+                    )}
+                    {product.inStock &&
+                      product.attributes.some(
+                        (attr) => !this.state.selectedAttributes[attr.name]
+                      ) && (
+                        <p className="error-text" style={{ color: "red" }}>
+                          Please select all required options to enable the button.
+                        </p>
+                      )}
+               
+
+
               <div data-testid='product-description'>
                  <strong>Description:</strong>
                   <p>{parse(product.description)}</p>

@@ -3,7 +3,7 @@ import quickcart from "../assets/Quickcart.png";
 
 class QuickShop extends React.Component {
   handleQuickShop = async () => {
-    const { product, addToCart } = this.props;
+    const { product, addToCart , toggleCart} = this.props;
 
     const query = `
       {
@@ -52,21 +52,11 @@ class QuickShop extends React.Component {
           quantity: 1,
         };
 
-      
+        toggleCart();
         addToCart(cartItem);
 
         
-        const attributeDisplay = attributes.map((attr) => {
-          const formattedValues = formattedAttributes[attr.name].map((item) => {
-            return item.selected
-              ? `[${item.display_value} - selected]`
-              : `[${item.display_value}]`;
-          }).join(" ");
-
-          return `${attr.name}:\n${formattedValues}`;
-        }).join("\n");
-
-        alert(`Added ${product.name} to the cart with attributes:\n${attributeDisplay} with quantity = ${cartItem.quantity}`);
+        
       }
     } catch (error) {
       console.error("Failed to fetch product attributes:", error);

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/Logo.png";
 import cart from "../assets/Empty Cart.svg";
 import AddOrder from "./AddOrder";
+import withLocation from "./withLocation";
 
 class Navbar extends React.Component {
   toggleCart = () => {
@@ -55,7 +56,7 @@ class Navbar extends React.Component {
   };
 
   render() {
-    const { cartStatus, cartItems, clearCart } = this.props;
+    const { cartStatus, cartItems, clearCart, location } = this.props;
     const totalPrice = this.calculateTotalPrice();
     const totalQuantity = this.calculateTotalQuantity();
 
@@ -65,46 +66,37 @@ class Navbar extends React.Component {
     return (
       <nav className="navbar">
         <ul className="sections">
-          <li>
-            <NavLink
-              to="/"
+              <li>
+                <NavLink
+              to="/all"
               className={({ isActive }) => (isActive ? "active-link" : "")}
+              data-testid={
+                location.pathname === "/all" ? "active-category-link" : "category-link"
+              }
             >
-              {({ isActive }) => (
-                <span
-                  data-testid={isActive ? "active-category-link" : "category-link"}
-                >
-                  ALL
-                </span>
-              )}
+              All
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/cloth"
+          <NavLink
+              to="/clothes"
               className={({ isActive }) => (isActive ? "active-link" : "")}
+              data-testid={
+                location.pathname === "/clothes" ? "active-category-link" : "category-link"
+              }
             >
-              {({ isActive }) => (
-                <span
-                  data-testid={isActive ? "active-category-link" : "category-link"}
-                >
-                  Clothes
-                </span>
-              )}
+              clothes
             </NavLink>
           </li>
           <li>
-            <NavLink
+          <NavLink
               to="/tech"
               className={({ isActive }) => (isActive ? "active-link" : "")}
+              data-testid={
+                location.pathname === "/tech" ? "active-category-link" : "category-link"
+              }
             >
-              {({ isActive }) => (
-                <span
-                  data-testid={isActive ? "active-category-link" : "category-link"}
-                >
-                  Tech
-                </span>
-              )}
+              Tech
             </NavLink>
           </li>
         </ul>
@@ -112,12 +104,12 @@ class Navbar extends React.Component {
         <img src={logo} alt="Logo" id="logo" />
 
         <div className="cart-menu">
-          <button id="cart" data-cart-status={cartStatus} onClick={this.toggleCart}>
+          <button data-testid="cart-btn" id="cart" data-cart-status = {cartStatus} onClick={this.toggleCart}>
             <img src={cart} alt="Cart" className="img" />
             <h6 id="cart-counter">{totalQuantity}</h6>
           </button>
           {cartStatus === "open" && (
-            <div className="current-cart">
+            <div className="current-cart" data-testid="cart-overlay">
               <p data-testid="cart-item-amount">
                 <strong>My Bag</strong> {totalQuantity} items
               </p>
@@ -150,7 +142,7 @@ class Navbar extends React.Component {
                                         value.selected ? "selected" : ""
                                       }`}
                                       style={{ backgroundColor: value.valuex }}
-                                      data-testid={`cart-item-attribute-${kebabKey}-${kebabKey}${
+                                      data-testid={`product-attribute-${kebabKey}-${value.valuex}${
                                         value.selected ? "-selected" : ""
                                       }`}
                                     />
@@ -160,7 +152,7 @@ class Navbar extends React.Component {
                                       className={`cart-attribute-box ${
                                         value.selected ? "selected" : ""
                                       }`}
-                                      data-testid={`cart-item-attribute-${kebabKey}-${kebabKey}${
+                                      data-testid={`product-attribute-${kebabKey}-${value.valuex}${
                                         value.selected ? "-selected" : ""
                                       }`}
                                     >
@@ -211,11 +203,26 @@ class Navbar extends React.Component {
   }
 }
 
-export default Navbar;
+export default withLocation(Navbar);
 
 /**
  * Cart  attribute Design
  *  Size = 
  * [ S = "S", M = "M", L= "L" ]
  * Color : same concept 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * {{isActive} ? }
+ *  
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  */

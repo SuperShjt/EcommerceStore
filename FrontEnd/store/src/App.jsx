@@ -57,10 +57,10 @@ function App() {
         />
         <GreyScreen cartStatus={cartStatus} toggleCart={toggleCart}/> 
           <Routes>
-            <Route path="/" element={<AllProducts addToCart={addToCart} />} />
-            <Route path="/cloth" element={<ClothProducts addToCart={addToCart} />} />
-            <Route path="/tech" element={<TechProducts addToCart={addToCart} />} />
-            <Route path="/product/:id" element={<ProductPage addToCart={addToCart} />} />
+            <Route path="/all" element={<AllProducts addToCart={addToCart}  toggleCart={toggleCart} />} />
+            <Route path="/clothes" element={<ClothProducts addToCart={addToCart}  toggleCart={toggleCart} />} />
+            <Route path="/tech" element={<TechProducts addToCart={addToCart}  toggleCart={toggleCart} />} />
+            <Route path="/product/:id" element={<ProductPage addToCart={addToCart}  toggleCart={toggleCart} />} />
           </Routes>
       </Router>
     </>
